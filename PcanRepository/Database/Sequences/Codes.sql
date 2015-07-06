@@ -1,4 +1,4 @@
---- Create Seq Codes
+--- Create Seq Codes 7/6/105
 
 CREATE SEQUENCE [dbo].[SeqVin] 
  AS [smallint]
