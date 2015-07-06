@@ -1,0 +1,6 @@
+d:\project\DataServices\DataServicesSol\GenerateTraceData\bin\Debug\GenerateTraceData.exe.config
+d:\project\DataServices\DataServicesSol\GenerateTraceData\bin\Debug\GenerateTraceData.exe
+d:\project\DataServices\DataServicesSol\GenerateTraceData\bin\Debug\GenerateTraceData.pdb
+d:\project\DataServices\DataServicesSol\GenerateTraceData\obj\Debug\GenerateTraceData.csprojResolveAssemblyReference.cache
+d:\project\DataServices\DataServicesSol\GenerateTraceData\obj\Debug\GenerateTraceData.exe
+d:\project\DataServices\DataServicesSol\GenerateTraceData\obj\Debug\GenerateTraceData.pdb

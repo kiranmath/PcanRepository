@@ -1,0 +1,73 @@
+﻿    .mGrid {   
+        width: 350px;   
+        background-color: #fff;   
+        margin: 5px 0 10px 0;   
+        border: solid 1px #525252;   
+        border-collapse:collapse; 
+          
+    }  
+    .mGrid td {   
+        padding: 2px;   
+        border: solid 1px #c1c1c1;   
+        color: #717171; 
+        /*color: black; */ 
+    }  
+    .mGrid th {   
+        padding: 1px 2px;   
+        color: #fff;   
+        background: #424242 url(Images\grd_head.png) repeat-x top;   
+        border-left: solid 1px #525252;   
+        font-size: 0.9em;   
+    }  
+    .mGrid .alt { background: #fcfcfc url(Images\grd_alt.png) repeat-x top; }  
+    .mGrid .pgr { background: #424242 url(Images\grd_pgr.png) repeat-x top; }  
+    .mGrid .pgr table { margin: 5px 0; }  
+    .mGrid .pgr td {   
+        border-width: 0;   
+        padding: 0 6px;   
+        border-left: solid 1px #666;   
+        font-weight: bold;   
+        color: #fff;   
+        line-height: 12px;   
+     }     
+    .mGrid .pgr a { color: #666; text-decoration: none; }  
+    .mGrid .pgr a:hover { color: #000; text-decoration: none; }  
+
+.gvItemRight { text-align: right; }
+    .mainBodyPosition
+{
+    padding-top:25px;
+    padding-bottom:45px;
+    padding-left:45px;
+    padding-right:45px;
+    width:80px;
+}
+
+
+#rcorners2 {
+ 
+    text-align: center;
+    width: 840;
+    border-radius: 25px;
+    border: 4px solid #8AC007;
+    padding: 20px;   
+    height: 180px; 
+    display: block;
+    align-items: center;
+    align-content:center;
+			letter-spacing: 1px;
+			font-size: 1em;
+			font-weight: 200;
+   
+}
+
+#p2i { 
+    text-align: center;
+    width: 840;
+  
+   
+}
+
+
+td.gettop {vertical-align: top;}
+td{vertical-align:text-top;}

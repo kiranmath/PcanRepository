@@ -1,0 +1,17 @@
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\GenerateStaticVinReports.exe.config
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\GenerateStaticVinReports.exe
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\GenerateStaticVinReports.pdb
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Debug\GenerateStaticVinReports.exe
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Debug\GenerateStaticVinReports.pdb
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\phantomjs.exe
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\phantomjs-license.txt
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\Ionic.Zip.dll
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\itextsharp.dll
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\Newtonsoft.Json.dll
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\WebDriver.dll
+c:\users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\WebDriver.xml
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Debug\GenerateStaticVinReports.csprojResolveAssemblyReference.cache
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\GenerateStaticVinReports.exe.manifest
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Debug\GenerateStaticVinReports.application
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Debug\GenerateStaticVinReports.exe.manifest
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Debug\GenerateStaticVinReports.application

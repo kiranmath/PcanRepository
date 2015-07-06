@@ -1,0 +1,17 @@
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\GenerateStaticVinReports.exe.config
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\phantomjs.exe
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\phantomjs-license.txt
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\GenerateStaticVinReports.exe
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\GenerateStaticVinReports.pdb
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\Ionic.Zip.dll
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\itextsharp.dll
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\Newtonsoft.Json.dll
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\WebDriver.dll
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\WebDriver.xml
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Release\GenerateStaticVinReports.exe
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Release\GenerateStaticVinReports.pdb
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\GenerateStaticVinReports.exe.manifest
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\bin\Release\GenerateStaticVinReports.application
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Release\GenerateStaticVinReports.exe.manifest
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Release\GenerateStaticVinReports.application
+C:\Users\kmath\documents\visual studio 2013\Projects\GenerateStaticVinReports\GenerateStaticVinReports\obj\Release\GenerateStaticVinReports.csprojResolveAssemblyReference.cache

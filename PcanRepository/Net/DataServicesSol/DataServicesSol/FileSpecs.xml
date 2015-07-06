@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<WriteFixedWidth Table="orders" StartAt="1" Output="Return">
+  <Position Start="1" Length="17" Name="Unique Identifier"/>
+  <Position Start="18" Length="3" Name="Error Flag"/>
+  <Position Start="21" Length="16" Name="Account Number" Justification="right"/>
+  <Position Start="37" Length="8" Name="Member Number"/>
+  <Position Start="45" Length="4" Name="Product"/>
+  <Position Start="49" Length="3" Name="Paytype"/>
+  <Position Start="52" Length="9" Name="Transit Routing Number"/>
+</WriteFixedWidth>

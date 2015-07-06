@@ -1,0 +1,547 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B29D5E15-9A26-4D37-BF91-F6F06D05246B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataServicesSol</RootNamespace>
+    <AssemblyName>DataServicesSol</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>\\bus.local\files\Engineering\_UnifiedData\DataServices\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>DataServicesSol.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>92AB5C6D0C6A122FD185A0C2090980F36172F4BB</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>DataServicesSol_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ProDataServ.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WaitWindow">
+      <HintPath>..\dll\WaitWindow.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CheckBoxListExtension.cs" />
+    <Compile Include="DataServicesDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataServicesDashboard.Designer.cs">
+      <DependentUpon>DataServicesDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataServicesGetDecodedData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataServicesGetDecodedData.Designer.cs">
+      <DependentUpon>DataServicesGetDecodedData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataServicesGetTraceData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataServicesGetTraceData.Designer.cs">
+      <DependentUpon>DataServicesGetTraceData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataServicesGetTwoHzData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataServicesGetTwoHzData.Designer.cs">
+      <DependentUpon>DataServicesGetTwoHzData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataServicesReportChargeSummary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataServicesReportChargeSummary.Designer.cs">
+      <DependentUpon>DataServicesReportChargeSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataServicesReportsDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataServicesReportsDashboard.Designer.cs">
+      <DependentUpon>DataServicesReportsDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetChargeSummaryIsoWeek.cs">
+      <DependentUpon>dS_GetChargeSummaryIsoWeek.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetChargeSummaryIsoWeek.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetChargeSummaryIsoWeek.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetDataRangeDates.cs">
+      <DependentUpon>dS_GetDataRangeDates.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="dS_GetDataRangeDates.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetDataRangeDates.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetDataStatus.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetDataStatus.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_EndTime.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_EndTime.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetBus.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetBus.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetChargingStations.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetChargingStations.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DS_GetCustomer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_GetCustomer.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetDataTypes.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetDataTypes.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetPcanVariables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetPcanVariables.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetReportRequests.cs">
+      <DependentUpon>dS_GetReportRequests.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="dS_GetReportRequests.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetReportRequests.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetSetReportRequests.cs">
+      <DependentUpon>dS_GetSetReportRequests.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetSetReportRequests.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetSetReportRequests.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetSymbolVariables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetSymbolVariables.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetSymbolVariablesA.cs">
+      <DependentUpon>dS_GetSymbolVariablesA.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetSymbolVariablesA.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetSymbolVariablesA.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_GetTwoHzVariables.cs">
+      <DependentUpon>dS_GetTwoHzVariables.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="dS_GetTwoHzVariables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_GetTwoHzVariables.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_PcanVariables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_PcanVariables.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_ReportViewer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_ReportViewer.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_StartTime.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_StartTime.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dS_XGetVariables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dS_XGetVariables.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form3.Designer.cs">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadWriteCSV.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="testBench.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="testBench.Designer.cs">
+      <DependentUpon>testBench.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TraceParameters.cs" />
+    <EmbeddedResource Include="DataServicesDashboard.resx">
+      <DependentUpon>DataServicesDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataServicesGetDecodedData.resx">
+      <DependentUpon>DataServicesGetDecodedData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataServicesGetTraceData.resx">
+      <DependentUpon>DataServicesGetTraceData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataServicesGetTwoHzData.resx">
+      <DependentUpon>DataServicesGetTwoHzData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataServicesReportChargeSummary.resx">
+      <DependentUpon>DataServicesReportChargeSummary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataServicesReportsDashboard.resx">
+      <DependentUpon>DataServicesReportsDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form3.resx">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="testBench.resx">
+      <DependentUpon>testBench.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="DataServicesSol_TemporaryKey.pfx" />
+    <None Include="dS_GetChargeSummaryIsoWeek.xsc">
+      <DependentUpon>dS_GetChargeSummaryIsoWeek.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetChargeSummaryIsoWeek.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetChargeSummaryIsoWeek.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="dS_GetChargeSummaryIsoWeek.xss">
+      <DependentUpon>dS_GetChargeSummaryIsoWeek.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetDataRangeDates.xsc">
+      <DependentUpon>dS_GetDataRangeDates.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetDataRangeDates.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetDataRangeDates.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="dS_GetDataRangeDates.xss">
+      <DependentUpon>dS_GetDataRangeDates.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetDataStatus.xsc">
+      <DependentUpon>dS_GetDataStatus.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetDataStatus.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetDataStatus.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="dS_GetDataStatus.xss">
+      <DependentUpon>dS_GetDataStatus.xsd</DependentUpon>
+    </None>
+    <None Include="dS_EndTime.xsc">
+      <DependentUpon>dS_EndTime.xsd</DependentUpon>
+    </None>
+    <None Include="dS_EndTime.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_EndTime.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_EndTime.xss">
+      <DependentUpon>dS_EndTime.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetBus.xsc">
+      <DependentUpon>dS_GetBus.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetBus.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetBus.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_GetBus.xss">
+      <DependentUpon>dS_GetBus.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetChargingStations.xsc">
+      <DependentUpon>dS_GetChargingStations.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetChargingStations.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetChargingStations.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_GetChargingStations.xss">
+      <DependentUpon>dS_GetChargingStations.xsd</DependentUpon>
+    </None>
+    <None Include="DS_GetCustomer.xsc">
+      <DependentUpon>DS_GetCustomer.xsd</DependentUpon>
+    </None>
+    <None Include="DS_GetCustomer.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_GetCustomer.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DS_GetCustomer.xss">
+      <DependentUpon>DS_GetCustomer.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetDataTypes.xsc">
+      <DependentUpon>dS_GetDataTypes.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetDataTypes.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetDataTypes.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_GetDataTypes.xss">
+      <DependentUpon>dS_GetDataTypes.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetPcanVariables.xsc">
+      <DependentUpon>dS_GetPcanVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetPcanVariables.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetPcanVariables.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_GetPcanVariables.xss">
+      <DependentUpon>dS_GetPcanVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetReportRequests.xsc">
+      <DependentUpon>dS_GetReportRequests.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetReportRequests.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetReportRequests.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_GetReportRequests.xss">
+      <DependentUpon>dS_GetReportRequests.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetSetReportRequests.xsc">
+      <DependentUpon>dS_GetSetReportRequests.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetSetReportRequests.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetSetReportRequests.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="dS_GetSetReportRequests.xss">
+      <DependentUpon>dS_GetSetReportRequests.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetSymbolVariables.xsc">
+      <DependentUpon>dS_GetSymbolVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetSymbolVariables.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetSymbolVariables.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_GetSymbolVariables.xss">
+      <DependentUpon>dS_GetSymbolVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetSymbolVariablesA.xsc">
+      <DependentUpon>dS_GetSymbolVariablesA.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetSymbolVariablesA.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetSymbolVariablesA.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_GetSymbolVariablesA.xss">
+      <DependentUpon>dS_GetSymbolVariablesA.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetTwoHzVariables.xsc">
+      <DependentUpon>dS_GetTwoHzVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_GetTwoHzVariables.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_GetTwoHzVariables.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="dS_GetTwoHzVariables.xss">
+      <DependentUpon>dS_GetTwoHzVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_PcanVariables.xsc">
+      <DependentUpon>dS_PcanVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_PcanVariables.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_PcanVariables.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_PcanVariables.xss">
+      <DependentUpon>dS_PcanVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_ReportViewer.xsc">
+      <DependentUpon>dS_ReportViewer.xsd</DependentUpon>
+    </None>
+    <None Include="dS_ReportViewer.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_ReportViewer.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_ReportViewer.xss">
+      <DependentUpon>dS_ReportViewer.xsd</DependentUpon>
+    </None>
+    <None Include="dS_StartTime.xsc">
+      <DependentUpon>dS_StartTime.xsd</DependentUpon>
+    </None>
+    <None Include="dS_StartTime.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_StartTime.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_StartTime.xss">
+      <DependentUpon>dS_StartTime.xsd</DependentUpon>
+    </None>
+    <None Include="dS_XGetVariables.xsc">
+      <DependentUpon>dS_XGetVariables.xsd</DependentUpon>
+    </None>
+    <None Include="dS_XGetVariables.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dS_XGetVariables.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="dS_XGetVariables.xss">
+      <DependentUpon>dS_XGetVariables.xsd</DependentUpon>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\BackGround01.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Proterra-Logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FileSpecs.xml" />
+    <Content Include="FileSpecs.txt" />
+    <Content Include="ProDataServ.ico" />
+    <None Include="Images\ProDataServices.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

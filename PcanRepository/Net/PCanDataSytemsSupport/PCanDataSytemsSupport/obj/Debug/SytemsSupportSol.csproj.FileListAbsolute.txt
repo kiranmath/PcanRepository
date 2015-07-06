@@ -1,0 +1,13 @@
+d:\users\kmath\documents\visual studio 2013\Projects\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\SytemsSupportSol.csprojResolveAssemblyReference.cache
+d:\users\kmath\documents\visual studio 2013\Projects\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\PCanDataSytemsSupport.CreateDecodeStoredProcByBus.resources
+d:\users\kmath\documents\visual studio 2013\Projects\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\PCanDataSytemsSupport.Properties.Resources.resources
+d:\users\kmath\documents\visual studio 2013\Projects\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\SytemsSupportSol.csproj.GenerateResource.Cache
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\bin\Debug\PCanDataSytemsSupport.exe.config
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\SytemsSupportSol.csprojResolveAssemblyReference.cache
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\PCanDataSytemsSupport.CreateDecodeStoredProcByBus.resources
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\PCanDataSytemsSupport.Properties.Resources.resources
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\SytemsSupportSol.csproj.GenerateResource.Cache
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\bin\Debug\PCanDataSytemsSupport.exe
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\bin\Debug\PCanDataSytemsSupport.pdb
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\PCanDataSytemsSupport.exe
+D:\Project\PCanDataSytemsSupport\PCanDataSytemsSupport\obj\Debug\PCanDataSytemsSupport.pdb
