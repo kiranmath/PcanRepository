@@ -1,3 +1,5 @@
+--- Create Seq Codes
+
 CREATE SEQUENCE [dbo].[SeqVin] 
  AS [smallint]
  START WITH 1
