@@ -1,0 +1,1000 @@
+USE [PcanRepository]
+
+GO
+
+
+DROP PROCEDURE [Nas].[DecodeFullByte24Intel_1M9TG16J4ES816068];
+
+
+GO
+
+
+CREATE PROCEDURE [Nas].[DecodeFullByte24Intel_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27);    
+DECLARE @SymbolName varchar(200);
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength TinyInt,AdjBitStart TinyInt,FirstStart tinyInt, SecondStart tinyInt, ThirdStart tinyInt);
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols WITH(NOLOCK) WHERE (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart,ThirdStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+                 FLOOR( AdjBitStart / 8 ) * 2 + 1 AS FirstStart , 
+			FLOOR( AdjBitStart / 8 ) * 2 + 3 AS SecondStart,
+			FLOOR( AdjBitStart / 8 ) * 2 + 5 AS ThirdStart	
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,data,TraceDt,VinID, ChargingStationID ,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068    WITH(NOLOCK) WHERE SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ INSERT INTO Nas.[TraceDecodeStage_1M9TG16J4ES816068](TraceDt,VinID,ChargingStationID, TraceMasterID,TraceID,PCanVID,RowNum,DataVal)
+ SELECT t.TraceDt,t.VinID,t.ChargingStationID, @TraceMasterId,t.TraceID,r.PCanVId, r.RowNum,CONVERT( bigint , CONVERT( varbinary( 20 ) , '0x' + 
+                                               CASE
+												  WHEN BitLength = '24' THEN SUBSTRING( Data , ThirdStart , 2)  + SUBSTRING( Data , SecondStart , 2)   
+												  WHEN BitLength = '16' THEN SUBSTRING( Data , SecondStart , 2)   
+                                               ELSE ''
+                                               END +  SUBSTRING( Data , FirstStart , 2) , 1)) * Factor + OFFSET AS DataVal                                                                              
+                                  
+      FROM
+           TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1;
+END
+
+GO
+
+DROP PROCEDURE [Nas].[DecodeFullByte24Motorola_1M9TG16J4ES816068];
+GO
+CREATE PROCEDURE [Nas].[DecodeFullByte24Motorola_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+SET NOCOUNT ON;
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength TinyInt,AdjBitStart TinyInt,FirstStart tinyInt, SecondStart tinyInt,ThirdStart tinyInt);
+DECLARE @VinID smallint
+
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart,ThirdStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+               FLOOR( AdjBitStart / 8 ) * 2 + 1 AS FirstStart , 
+			FLOOR( AdjBitStart / 8 ) * 2 + 3 AS SecondStart,
+			FLOOR( AdjBitStart / 8 ) * 2 + 5 AS ThirdStart			
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,  data, TraceDt, VinID, ChargingStationID,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068    WITH(NOLOCK) WHERE SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068](TraceDt, VinID, ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal)
+ SELECT t.TraceDt,t.VinID,t.ChargingStationID, @TraceMasterId,t.TraceID,r.PCanVId, r.RowNum,CONVERT( bigint , CONVERT( varbinary( 20 ) , '0x' + SUBSTRING( Data , FirstStart , 2) + 
+		                                     CASE 
+									    WHEN BitLength = '16' THEN SUBSTRING( Data , SecondStart , 2)  
+									    WHEN BitLength = '24' THEN SUBSTRING( Data , SecondStart , 2)  + SUBSTRING( Data , ThirdStart , 2)   
+                                               ELSE ''
+                                               END 
+									   , 1)	
+									  ) * Factor + OFFSET AS DataVal                                                                              
+                                  
+      FROM
+           TranDat t CROSS JOIN @PCanVar r  WHERE t.RW = 1;
+END
+
+GO
+
+DROP PROCEDURE [Nas].[DecodeFullByte32Motorola_1M9TG16J4ES816068];
+GO
+
+
+CREATE PROCEDURE [Nas].[DecodeFullByte32Motorola_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+SET NOCOUNT ON;
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength TinyInt,AdjBitStart TinyInt,FirstStart tinyInt);
+DECLARE @VinID smallint
+
+
+SELECT @SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+SET @FileDate = ISNULL(@FileDate,GetDate());
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+               FLOOR( AdjBitStart / 8 ) * 2 + 1 AS FirstStart 				
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID, data,TraceDt, VinID, ChargingStationID,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068    WITH(NOLOCK) where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068](TraceDt, VinID, ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal)
+ SELECT t.TraceDt,t.VinID, t.ChargingStationID,@TraceMasterId,t.TraceID,r.PCanVId, r.RowNum,(CONVERT( bigint , CONVERT( varbinary( 20 ) , '0x' + 
+		                                     CASE 
+									    WHEN BitLength = '8'  THEN SUBSTRING( Data , FirstStart , 2)  
+									    WHEN BitLength = '16' THEN SUBSTRING( Data , FirstStart , 4)  
+									    WHEN BitLength = '24' THEN SUBSTRING( Data , FirstStart , 6)  
+									    WHEN BitLength = '32' THEN SUBSTRING( Data , FirstStart , 8)  
+                                               ELSE ''
+                                               END 
+									   , 1)	
+									  ) * Factor) + OFFSET AS DataVal                                                                              
+                                  
+      FROM
+           TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1;
+END
+
+GO
+DROP PROCEDURE [Nas].[DecodeFullByte64Motorola_1M9TG16J4ES816068]
+
+GO
+
+CREATE PROCEDURE [Nas].[DecodeFullByte64Motorola_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength TinyInt,AdjBitStart TinyInt,FirstStart tinyInt, SecondStart tinyInt,ThirdStart tinyInt,FourthStart tinyInt,FifthStart tinyInt,SixthStart tinyInt, SeventhStart tinyInt, EightStart tinyInt);
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart,ThirdStart,FourthStart,FifthStart,SixthStart,SeventhStart,EightStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+               FLOOR( AdjBitStart / 8 ) * 2 + 1 AS FirstStart , 
+			FLOOR( AdjBitStart / 8 ) * 2 + 3 AS SecondStart,
+			FLOOR( AdjBitStart / 8 ) * 2 + 5 AS ThirdStart,
+			FLOOR( AdjBitStart / 8 ) * 2 + 7 AS FourthStart, 
+			FLOOR( AdjBitStart / 8 ) * 2 + 9 AS FifthStart,
+			FLOOR( AdjBitStart / 8 ) * 2 + 11 AS SixthStart,
+			FLOOR( AdjBitStart / 8 ) * 2 + 13 AS SeventhStart,
+			FLOOR( AdjBitStart / 8 ) * 2 + 15 AS EightStart	
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID, data,TraceDt, VinID, ChargingStationID,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068   where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068](TraceDt, VinID, ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal)
+ SELECT t.TraceDt,t.VinID,t.ChargingStationID, @TraceMasterId,t.TraceID,r.PCanVId, r.RowNum,CONVERT( bigInt  , CONVERT( varbinary(MAX) , '0x' + SUBSTRING( Data , FirstStart , 2) + 
+		                                     CASE 
+									    WHEN BitLength = '16' THEN SUBSTRING( Data , SecondStart , 2)  
+									    WHEN BitLength = '24' THEN SUBSTRING( Data , SecondStart , 2)  + SUBSTRING( Data , ThirdStart , 2)  									   
+                                               ELSE ''
+                                               END 
+									   , 1)	
+									  ) * Factor + OFFSET AS DataVal                                                                              
+                                  
+      FROM
+           TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1;
+END
+
+
+GO
+
+DROP PROCEDURE [Nas].[DecodeFullByteEnumIntel_1M9TG16J4ES816068]
+GO
+
+
+
+CREATE PROCEDURE [Nas].[DecodeFullByteEnumIntel_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+
+DECLARE  @PCanVar TABLE (PCanVId Int,Name varchar(100), RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength TinyInt,AdjBitStart TinyInt,FirstStart tinyInt, SecondStart tinyInt);
+DECLARE  @PCanEnum TABLE (PCanVId Int,ENumValue int, EnumString varchar(100));
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+INSERT INTO @PCanEnum (PCanVId,ENumValue,EnumString)
+SELECT PCanVId, ENumValue ,EnumString from [dbo].[PCANEnums] e WITH(NOLOCK) WHERE e.SymbolId = @SymbolID and isActive = 1;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Name,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Name, Factor , OffSet , BitLength ,  AdjBitStart ,
+                 AdjBitStart / 4 + 1 AS FirstStart,
+                (AdjBitStart + BitLength) / 4 - 1 AS SecondStart 
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,  data,TraceDt, VinID, ChargingStationID,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068    WITH(NOLOCK) where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ ,TDS AS (
+ SELECT TraceDt,VinID,ChargingStationID,  t.TraceID,r.PCanVId,r.Name, r.RowNum,CONVERT( bigint , CONVERT( varbinary( 20 ) , '0x' + 
+		                                     CASE  WHEN BitLength = '16' THEN SUBSTRING( Data , SecondStart , 2)   
+                                               ELSE ''
+                                               END +  SUBSTRING( Data , FirstStart , 2) , 1)) * Factor + OFFSET AS DataVal                                                                              
+                                  
+      FROM
+           TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1)
+		 INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068](TraceDt, VinID, ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal,DataEnum)     
+		 SELECT  t.TraceDt,t.VinID, t.ChargingStationID,@TraceMasterId,t.TraceID,t.PCanVId,t.RowNum,t.DataVal,ISNULL(e.EnumString,NULL) as DataEnum from TDS t LEFT JOIN @PCanEnum e ON e.PcanvId = t.PcanvId and e.ENumValue = CAST(t.DataVal as INT) ;
+
+	
+		 
+END
+
+GO
+DROP PROCEDURE [Nas].[DecodeFullByteIntel_1M9TG16J4ES816068]
+GO
+
+
+CREATE PROCEDURE [Nas].[DecodeFullByteIntel_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength TinyInt,AdjBitStart TinyInt,FirstStart tinyInt, SecondStart tinyInt);
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+                 AdjBitStart / 4 + 1 AS FirstStart,
+                (AdjBitStart + BitLength) / 4 - 1 AS SecondStart 
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,  data,TraceDt,VinID, ChargingStationID, ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW FROM    Nas.RawTraceDataStage_1M9TG16J4ES816068  WITH(NOLOCK) where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068]( TraceDt,VinID,ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal)
+ SELECT  TraceDt,VinID,ChargingStationID, @TraceMasterId,t.TraceID,r.PCanVId, r.RowNum,CONVERT( bigint , CONVERT( varbinary( 20 ) , '0x' + 
+		                                     CASE  WHEN BitLength = '16' THEN SUBSTRING( Data , SecondStart , 2)   
+                                               ELSE ''
+                                               END +  SUBSTRING( Data , FirstStart , 2) , 1)) * Factor + OFFSET AS DataVal                                                                              
+                                  
+      FROM
+           TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1;
+END
+
+
+GO
+
+DROP PROCEDURE [Nas].[DecodeFullByteMotorola_1M9TG16J4ES816068]
+GO
+
+CREATE PROCEDURE [Nas].[DecodeFullByteMotorola_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength TinyInt,AdjBitStart TinyInt,FirstStart tinyInt, SecondStart tinyInt);
+
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+                 AdjBitStart / 4 + 1 AS FirstStart,
+                (AdjBitStart + BitLength) / 4 - 1 AS SecondStart 
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,data,TraceDt,VinID, ChargingStationID ,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068    WITH(NOLOCK) where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068](TraceDt,VinID,ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal)
+ SELECT TraceDt,VinID,ChargingStationID, @TraceMasterId,t.TraceID,r.PCanVId, r.RowNum,CONVERT( bigint , CONVERT( varbinary( 20 ) , '0x' + SUBSTRING( Data , FirstStart , 2) + 
+		                                     CASE  WHEN BitLength = '16' THEN SUBSTRING( Data , SecondStart , 2)   
+                                               ELSE ''
+                                               END  , 1)) * Factor + OFFSET AS DataVal                                                                              
+                                  
+      FROM
+           TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1 ;
+END
+
+
+GO
+
+DROP PROCEDURE [Nas].[DecodeGTFByteIntel_1M9TG16J4ES816068]
+GO
+
+
+CREATE PROCEDURE [Nas].[DecodeGTFByteIntel_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) ;
+DECLARE @SymbolName varchar(200);
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength SmallInt,AdjBitStart SmallInt,FirstStart SmallInt, SecondStart SmallInt,FirstInnerStart SmallInt, SecondInnerStart smallInt);
+DECLARE  @PCanEnum TABLE (PCanVId Int,ENumValue int, EnumString varchar(100));
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+
+INSERT INTO @PCanEnum (PCanVId,ENumValue,EnumString)
+select PCanVId, ENumValue ,EnumString from [dbo].[PCANEnums] e with(nolock) where e.SymbolId = @SymbolID and isActive = 1;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart,FirstInnerStart,SecondInnerStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+			FLOOR( AdjBitStart / 8 ) * 2 + 1 AS FirstStart , 
+			FLOOR( AdjBitStart / 8 ) * 2 + 3 AS SecondStart,
+			CASE
+				WHEN BitLength < 8 THEN 8 * (FLOOR( AdjBitStart / 8) + 1) - AdjBitStart - BitLength + 1
+					ELSE 0
+				END AS FirstInnerStart,
+			CASE
+				WHEN BitLength > 8  and BitLength < 16 THEN 8 - BitLength % 8
+					ELSE 0
+				END AS SecondInnerStart
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,  Data,TraceDt,VinID, ChargingStationID ,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068   WITH(NOLOCK) WHERE SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ ,TDS AS 
+ (SELECT TraceDt,VinID,ChargingStationID, t.TraceID,r.PCanVId, r.RowNum,
+      CASE
+          WHEN BitLength < '8' THEN (dbo.BinaryToDecimal( SUBSTRING( dbo.HexToBinary2Digits(  SUBSTRING( Data , FirstStart , 2)) , FirstInnerStart , BitLength))  * Factor) + OFFSET 
+		WHEN BitLength > '8' and BitLength < 16 THEN (dbo.BinaryToDecimal( SUBSTRING( dbo.Hex2Bin(  SUBSTRING( Data , SecondStart , 2)) , SecondInnerStart , BitLength) + dbo.Hex2Bin(  SUBSTRING( Data ,FirstStart , 2)))  * Factor) + OFFSET 
+		WHEN BitLength = '8' THEN   (CONVERT( bigint , CONVERT( varbinary(20) , '0x' +  SUBSTRING( Data , FirstStart , 2), 1) ) * Factor) + OFFSET 
+		WHEN  BitLength = '16' THEN  (CONVERT( bigint , CONVERT( varbinary(20) , '0x' + SUBSTRING( Data , SecondStart , 2)  + ( SUBSTRING( Data , FirstStart , 2)), 1) ) * Factor) + OFFSET 
+      END AS DataVal
+                   
+FROM
+    TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1)	
+	INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068]( TraceDt,VinID,ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal,DataEnum)
+	Select  TraceDt,VinID,ChargingStationID, @TraceMasterId,t.TraceID,t.PCanVId,t.RowNum,t.DataVal,ISNULL(e.EnumString,NULL) as DataEnum from TDS t	LEFT JOIN @PCanEnum e ON e.PcanvId = t.PcanvId and e.ENumValue = cast(t.DataVal as int) ;
+	
+	
+			
+END
+
+
+GO
+
+DROP PROCEDURE [Nas].[DecodeGTFByteMotorola_1M9TG16J4ES816068]
+GO
+
+CREATE PROCEDURE [Nas].[DecodeGTFByteMotorola_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength SmallInt,AdjBitStart SmallInt,FirstStart SmallInt, SecondStart SmallInt,FirstInnerStart SmallInt, SecondInnerStart smallInt);
+
+
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart,FirstInnerStart,SecondInnerStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+			FLOOR( AdjBitStart / 8 ) * 2 + 1 AS FirstStart , 
+			FLOOR( AdjBitStart / 8 ) * 2 + 3 AS SecondStart,
+			CASE	
+				WHEN BitLength < 8 THEN   AdjBitStart - (8 * (FLOOR( AdjBitStart / 8) ))  + 1
+				WHEN BitLength > 8  and BitLength < 16 THEN AdjBitStart - (8 * (FLOOR( AdjBitStart / 8) ))  + 1
+				ELSE 0
+				END AS FirstInnerStart,			
+				0 AS SecondInnerStart
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,  data,TraceDt,VinID, ChargingStationID ,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068    WITH(NOLOCK) where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ ,TDS AS 
+ (SELECT TraceDt,VinID,ChargingStationID, t.TraceID,r.PCanVId, r.RowNum,
+	 CASE
+           WHEN BitLength < '8' THEN dbo.GetDecimal( SUBSTRING( dbo.Hex2Bin(  SUBSTRING( Data , FirstStart , 2)) , FirstInnerStart , BitLength))  * Factor + OFFSET 
+		 WHEN BitLength > '8' and BitLength < 16 THEN dbo.GetDecimal(SUBSTRING( dbo.Hex2Bin(  SUBSTRING( Data , FirstStart , 2)) , FirstInnerStart ,  8 - FirstInnerStart + 1 ) + SUBSTRING(dbo.Hex2Bin(  SUBSTRING( Data , SecondStart , 2)) , 1 , BitLength - ( 8 - FirstInnerStart + 1)))  * Factor + OFFSET 
+		 WHEN BitLength = '8' THEN   CONVERT( bigint , CONVERT( varbinary(20) , '0x' +  SUBSTRING( Data , FirstStart , 2), 1) ) * Factor + OFFSET 
+		 WHEN  BitLength = '16' THEN  CONVERT( bigint , CONVERT( varbinary(20) , '0x' +  ( SUBSTRING( Data , FirstStart , 2)) + SUBSTRING( Data , SecondStart , 2), 1) ) * Factor + OFFSET 
+           END AS DataVal
+                   
+FROM
+    TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1)	
+	INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068](TraceDt,VinID,ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal,DataEnum)
+	Select TraceDt,VinID,ChargingStationID, @TraceMasterId,t.TraceID,t.PCanVId,t.RowNum,t.DataVal,ISNULL(e.EnumString,NULL) as DataEnum from TDS t	LEFT JOIN PCANEnums e ON e.PcanvId = t.PcanvId and e.ENumValue = t.DataVal ;
+	
+	
+			
+END
+
+GO
+DROP PROCEDURE [Nas].[DecodeLTFByteIntel_1M9TG16J4ES816068]
+GO
+
+CREATE PROCEDURE [Nas].[DecodeLTFByteIntel_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int,Name varchar(100), RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength SmallInt,AdjBitStart SmallInt,FirstStart SmallInt, SecondStart SmallInt,FirstInnerStart SmallInt);
+DECLARE  @PCanEnum TABLE (PCanVId Int,ENumValue int, EnumString varchar(100));
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+
+INSERT INTO @PCanEnum (PCanVId,ENumValue,EnumString)
+select PCanVId, ENumValue,EnumString from [dbo].[PCANEnums] e with(nolock) where e.SymbolId = @SymbolID and isActive = 1;
+
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart,FirstInnerStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+			 FLOOR( AdjBitStart / 8) * 2 + 1 AS FirstStart , 
+			(AdjBitStart + BitLength) / 4 - 1 AS SecondStart , 
+				CASE
+					WHEN BitLength < 8 THEN 8 * (FLOOR( AdjBitStart / 8)  + 1) - AdjBitStart - BitLength + 1
+                 ELSE 0
+                END AS FirstInnerStart
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,  data,TraceDt,VinID, ChargingStationID ,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068   WITH(NOLOCK) where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ ,TDS AS 
+ (SELECT TraceDt,VinID,ChargingStationID, t.TraceID,r.PCanVId,r.Name, r.RowNum,
+CASE
+   WHEN BitLength < '8' THEN (dbo.BinaryToDecimal( SUBSTRING( dbo.HexToBinary2Digits(  SUBSTRING( Data , FirstStart , 2)) , FirstInnerStart , BitLength))  * Factor) + OFFSET 
+   WHEN BitLength = '8' THEN   (CONVERT( bigint , CONVERT( varbinary(20) , '0x' +  SUBSTRING( Data , FirstStart , 2), 1) ) * Factor) + OFFSET 
+   WHEN  BitLength = '16' THEN  (CONVERT( bigint , CONVERT( varbinary(20) , '0x' + SUBSTRING( Data , SecondStart , 2)  + ( SUBSTRING( Data , FirstStart , 2)), 1) ) * Factor) + OFFSET 
+END AS DataVal                    
+FROM
+    TranDat t CROSS JOIN @PCanVar r    WHERE t.RW = 1)	
+	INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068]( TraceDt,VinID,ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal,DataEnum)
+	SELECT  TraceDt,VinID,ChargingStationID, @TraceMasterId,t.TraceID,t.PCanVId,t.RowNum,t.DataVal,ISNULL(e.EnumString,NULL) as DataEnum from TDS t	LEFT JOIN @PCanEnum e ON e.PcanvId = t.PcanvId and e.ENumValue = Cast(t.DataVal as Int) ;
+	
+			
+END
+
+GO
+DROP PROCEDURE [Nas].[DecodeLTFByteIntelMux_1M9TG16J4ES816068]
+GO
+
+CREATE PROCEDURE [Nas].[DecodeLTFByteIntelMux_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength SmallInt,AdjBitStart SmallInt,FirstStart SmallInt, SecondStart SmallInt,FirstInnerStart SmallInt, MUX Varchar(10) );
+
+
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+
+
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart,FirstInnerStart,MUX)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+			  FLOOR( AdjBitStart / 8) * 2 + 1 AS FirstStart , 
+			 (AdjBitStart + BitLength) / 4 - 1 AS SecondStart , 
+				 CASE
+                WHEN BitLength < 8 THEN 8 * (FLOOR( AdjBitStart / 8)  + 1) - AdjBitStart - BitLength + 1
+                    ELSE 0
+                END AS FirstInnerStart,
+			 MUX
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID,  data,TraceDt,VinID, ChargingStationID ,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068    WITH(NOLOCK) where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ ,TDS AS 
+ (SELECT TraceDt,VinID,ChargingStationID, t.TraceID,r.PCanVId, r.RowNum,
+ CASE
+           WHEN BitLength < '8' THEN dbo.BinaryToDecimal( SUBSTRING( dbo.Hex2Bin(  SUBSTRING( Data , FirstStart , 2)) , FirstInnerStart , BitLength))  * Factor + OFFSET 
+		 WHEN BitLength = '8' THEN   CONVERT( bigint , CONVERT( varbinary(20) , '0x' +  SUBSTRING( Data , FirstStart , 2), 1) ) * Factor + OFFSET 
+		 WHEN  BitLength = '16' THEN  CONVERT( bigint , CONVERT( varbinary(20) , '0x' + SUBSTRING( Data , SecondStart , 2)  + ( SUBSTRING( Data , FirstStart , 2)), 1) ) * Factor + OFFSET 
+           END AS DataVal                 
+FROM
+    TranDat t CROSS JOIN @PCanVar r WHERE  t.RW = 1 AND (MUX = 'm' + cast(cast(left(data,2) as int) as varchar) ) OR MUX IS NULL OR MUX = '') 	
+	INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068](TraceDt,VinID,ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal,DataEnum)
+	Select TraceDt,VinID,ChargingStationID, @TraceMasterId,t.TraceID,t.PCanVId,t.RowNum,t.DataVal,ISNULL(e.EnumString,NULL) as DataEnum from TDS t	LEFT JOIN PCANEnums e ON e.PcanvId = t.PcanvId and e.ENumValue = t.DataVal ;
+	
+	
+			
+END
+
+GO
+DROP PROCEDURE [Nas].[DecodeLTFByteMotorola_1M9TG16J4ES816068]
+GO
+
+CREATE PROCEDURE [Nas].[DecodeLTFByteMotorola_1M9TG16J4ES816068]
+ @SymbolID bigint ,
+ @TraceMasterId  int,
+ @FileDate datetime2 = NULL
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+DECLARE @SymbolIDHex varchar(27) 
+DECLARE @SymbolName varchar(200)
+DECLARE  @PCanVar TABLE (PCanVId Int, RowNum SmallInt, Factor Decimal(18,8), Offset Decimal(18,8),BitLength SmallInt,AdjBitStart SmallInt,FirstStart SmallInt, SecondStart SmallInt,FirstInnerStart SmallInt, SecondInnerStart SmallInt);
+
+
+
+
+SET @FileDate = ISNULL(@FileDate,GetDate());
+
+SELECT @SymbolID=SymbolID,@SymbolIDHex=SymbolIDHex,@SymbolName=Name from PCANSymbols  WITH(NOLOCK) where (@FileDate between EffectiveDate and EndDate) and isActive= 1 and SymbolID = @SymbolID;
+
+INSERT INTO @PCanVar(RowNum,PCanVId,Factor,Offset,BitLength,AdjBitStart,FirstStart,SecondStart,FirstInnerStart,SecondInnerStart)
+SELECT ROW_NUMBER()OVER( ORDER BY AdjBitStart)AS RowNum ,               
+			 PCanVId, Factor , OffSet , BitLength ,  AdjBitStart ,
+		    FLOOR( AdjBitStart / 8 ) * 2 + 1 AS FirstStart , 
+			FLOOR( AdjBitStart / 8 ) * 2 + 3 AS SecondStart,
+			CASE
+				WHEN BitLength < 8 THEN   AdjBitStart - (8 * (FLOOR( AdjBitStart / 8) ))   + 1
+					ELSE 0
+			END AS FirstInnerStart,
+			CASE
+				WHEN BitLength > 8  and BitLength < 16 THEN 8 - BitLength % 8
+					ELSE 0
+			END AS SecondInnerStart
+FROM [PCANRepository].[dbo].[PCANVariables]  WITH(NOLOCK)
+WHERE SymbolID =  @SymbolID;
+
+WITH TranDat AS 
+(SELECT  TraceID, data,TraceDt,VinID, ChargingStationID ,  ROW_NUMBER() OVER (PARTITION BY ROUND(Increment,0),TraceMasterID,SymbolIDHEX,VinID,ChargingStationID ORDER by TraceId) AS RW  FROM  Nas.RawTraceDataStage_1M9TG16J4ES816068    WITH(NOLOCK) where SymbolIDHex = @SymbolIDHex and TraceMasterID = @TraceMasterID)
+ ,TDS AS 
+ (SELECT TraceDt,VinID,ChargingStationID, t.TraceID,r.PCanVId, r.RowNum,
+    CASE
+         WHEN BitLength < '8' THEN dbo.BinaryToDecimal( SUBSTRING( dbo.Hex2Bin(  SUBSTRING( Data , FirstStart , 2)) , FirstInnerStart , BitLength))  * Factor + OFFSET 
+		 WHEN BitLength > '8' and BitLength < 16 THEN dbo.BinaryToDecimal(  dbo.Hex2Bin(  SUBSTRING( Data ,FirstStart , 2)) + SUBSTRING( dbo.Hex2Bin(  SUBSTRING( Data , SecondStart , 2)) , SecondInnerStart , BitLength) )  * Factor + OFFSET 
+		 WHEN BitLength = '8' THEN   CONVERT( bigint , CONVERT( varbinary(20) , '0x' +  SUBSTRING( Data , FirstStart , 2), 1) ) * Factor + OFFSET 
+		 WHEN  BitLength = '16' THEN  CONVERT( bigint , CONVERT( varbinary(20) , '0x' +  ( SUBSTRING( Data , FirstStart , 2)) + SUBSTRING( Data , SecondStart , 2), 1) ) * Factor + OFFSET 
+    END AS DataVal                    
+FROM
+    TranDat t CROSS JOIN @PCanVar r   WHERE t.RW = 1)	
+	INSERT INTO [Nas].[TraceDecodeStage_1M9TG16J4ES816068](TraceDt,VinID,ChargingStationID, TraceMasterId,TraceID,PCanVID,RowNum,DataVal,DataEnum)
+	Select TraceDt,VinID,ChargingStationID, @TraceMasterId,t.TraceID,t.PCanVId,t.RowNum,t.DataVal,ISNULL(e.EnumString,NULL) as DataEnum from TDS t	LEFT JOIN PCANEnums e ON e.PcanvId = t.PcanvId and e.ENumValue = t.DataVal ;
+	
+	
+			
+END
+
+
+GO
+DROP PROCEDURE [Nas].[DoDecode_1M9TG16J4ES816068]
+GO
+
+
+CREATE PROCEDURE [Nas].[DoDecode_1M9TG16J4ES816068]
+	@InternalTracker bit = 1,
+	@TraceMasterId int,
+	@WorkGroup smallint = 0
+
+AS
+BEGIN
+	DECLARE @Stage varchar(50);
+	DECLARE @Sym TABLE (RowNum int not null primary key identity(1,1),SymbolID BigInt)
+	DECLARE @IncRows int = 1;
+	DECLARE @LocalSymbolId varchar(50);
+	DECLARE @MaxRows int;
+	DECLARE @FileDate date ;
+
+
+	SET NOCOUNT ON;
+
+
+	SET @FileDate = (SELECT ISNULL([TraceStartDate],GetDate()) from [dbo].[TraceMaster] where TraceMasterId = @TraceMasterId);
+	IF (@WorkGroup = 0 OR @WorkGroup = 1)
+	BEGIN
+	  SET @Stage = 'DecodeLTFByteIntel';
+				IF @InternalTracker = 1
+				BEGIN	
+				INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+				END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+				SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+		  
+					 -- INSERT INTO [dbo].[TraceDecodeStage](TraceMasterId,TraceID,PCanVID,RowNum,DataVal,DataEnum)
+					  EXEC Nas.DecodeLTFByteIntel_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+		  
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+	   DELETE FROM @Sym;
+	
+
+	END 
+	
+	IF (@WorkGroup = 0 OR @WorkGroup = 2)
+	BEGIN
+
+	  SET @Stage = 'DecodeLTFByteMotorola';
+		IF @InternalTracker = 1
+		BEGIN	
+		INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+		END;
+
+	DELETE FROM @Sym;
+
+	INSERT INTO @Sym(SymbolID)
+	SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+	SET @IncRows = 0;
+	SET @LocalSymbolId = NULL;
+	SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+	   WHILE (@IncRows <= @MaxRows)
+	   BEGIN
+		  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+
+	
+
+		  EXEC Nas.DecodeLTFByteMotorola_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+		  SET  @IncRows = @IncRows + 1;
+	   END;
+
+	   DELETE FROM @Sym;
+
+
+	     SET @Stage = 'DecodeGTFByteIntel';
+	IF @InternalTracker = 1
+		BEGIN	
+		INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+		END;
+
+	DELETE FROM @Sym;
+
+	INSERT INTO @Sym(SymbolID)
+	SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+	SET @IncRows = 0;
+	SET @LocalSymbolId = NULL;
+	SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+	   WHILE (@IncRows <= @MaxRows)
+	   BEGIN
+		  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+
+		
+		  EXEC Nas.DecodeGTFByteIntel_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+		  SET  @IncRows = @IncRows + 1;
+	   END;
+
+	   DELETE FROM @Sym;
+	
+
+
+	END 
+
+
+	IF (@WorkGroup = 0 OR @WorkGroup = 3)
+
+	BEGIN
+
+	       SET @Stage = 'DecodeGTFByteMotorola';
+				IF @InternalTracker = 1
+					BEGIN	
+					INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+					END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+				SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+
+	
+
+					  EXEC Nas.DecodeGTFByteMotorola_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+				   DELETE FROM @Sym;
+
+	  
+
+	END 
+
+
+	IF (@WorkGroup = 0 OR @WorkGroup = 4)
+
+	BEGIN
+
+				SET @Stage = 'DecodeFullByteIntel';
+				IF @InternalTracker = 1
+					BEGIN	
+					  INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+					END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+					SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+					  EXEC Nas.DecodeFullByteIntel_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+				   DELETE FROM @Sym;
+
+				 --------------------------------------------
+				SET @Stage = 'DecodeFullByteEnumIntel';
+				IF @InternalTracker = 1
+					BEGIN	
+					  INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+					END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+					SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+					  EXEC Nas.DecodeFullByteEnumIntel_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+				   DELETE FROM @Sym;
+				------------------------------------------
+
+			SET @Stage = 'DecodeFullByteMotorola';
+				IF @InternalTracker = 1
+				BEGIN	
+				INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+				END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+				SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+					  EXEC Nas.DecodeFullByteMotorola_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+				   DELETE FROM @Sym;
+				----------------------------------------
+	 
+
+				   SET @Stage = 'DecodeLTFByteIntelMux';
+				IF @InternalTracker = 1
+				BEGIN	
+				INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+				END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+				SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+					  EXEC Nas.DecodeLTFByteIntelMux_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+				   DELETE FROM @Sym;
+
+
+				 SET @Stage = 'DecodeFullByte24Motorola';
+				IF @InternalTracker = 1
+				BEGIN	
+				INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+				END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+				SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+					  EXEC Nas.DecodeFullByte24Motorola_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+				   DELETE FROM @Sym;
+
+
+				---------------------------------------
+
+				   SET @Stage = 'DecodeFullByte24Intel';
+				IF @InternalTracker = 1
+				BEGIN	
+				INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+				END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+				SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+					  EXEC Nas.DecodeFullByte24Intel_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+				   DELETE FROM @Sym;
+				---------------------------------------
+
+
+				   SET @Stage = 'DecodeFullByte32Motorola';
+				IF @InternalTracker = 1
+				BEGIN	
+				INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+				END;
+
+				DELETE FROM @Sym;
+
+				INSERT INTO @Sym(SymbolID)
+				SELECT SymbolID  from DecodeProcessingRules where  processingtype = @Stage order by ProcessingRuleID;
+
+				SET @IncRows = 0;
+				SET @LocalSymbolId = NULL;
+				SET @MaxRows = (SELECT max(RowNum) FROM @Sym);
+
+
+				   WHILE (@IncRows <= @MaxRows)
+				   BEGIN
+					  SET @LocalSymbolId = (SELECT SymbolID from @Sym where RowNum = @IncRows);
+					  EXEC Nas.DecodeFullByte32Motorola_1M9TG16J4ES816068 @LocalSymbolId, @TraceMasterId, @FileDate;
+					  SET  @IncRows = @IncRows + 1;
+				   END;
+
+				   DELETE FROM @Sym;
+
+         END
+
+	 SET @Stage = 'EndOfDecode';
+	IF @InternalTracker = 1
+	BEGIN	
+	INSERT INTO [DecodeLog] (TraceMasterId,Stage) Values (@TraceMasterId,@Stage);
+	END;
+END
+
+
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
