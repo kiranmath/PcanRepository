@@ -1,0 +1,5 @@
+Stored Procedure Name :
+SlideOutTablePartition
+
+Change Variable in days : 
+DECLARE @SlideWindow smallint = 30;
