@@ -1,0 +1,11 @@
+CustomerID,CustomerName,Address01,Address02,City,State,Zip,IsActive,EffectiveDate,Enddate,UpdatedBy,LastUpdate,FileGrp
+1,Reno RTC,,,Reno,,,True,,,,,Ren
+2,VIA Metro,,,San Antonio,,,True,,,,,San
+3,Stockton Metro Transit,,,Stockton,,,True,,,,,Sto
+4,Star Metro,,,Tallahassee,,,True,,,,,Tal
+5,Worcester RTA,,,Worcester,,,True,,,,,Wor
+6,Clemson Area Transit,,,Seneca,,,True,,,,,Sen
+7,Foothill Transit,,,Glendora,CA,,,,,,,fht
+8,TARC,,,Louisville ,KN,,,,,,,Lou
+9,Nashville MTA,,,Nashville,TN,,,,,,,Nas
+10,Proterra,,,Greenville,SC,,,,,,,Pro

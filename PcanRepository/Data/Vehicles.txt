@@ -1,0 +1,75 @@
+VinID,BusNumber,Bus,BusOwner,Vin,MadeYear,Make,ShippingWeight,BodyType,BusBody,Engine,SAE,GVWR,Model,VinIssueDate,LastUpdate,IsActive
+162,4,Altoona,Proterra,1M9TG11J9BG816007,2011,Proterra,0,,,,0,35660,ECORIDE BE35,2011-02-01,,True
+163,5,San 1,VIA,1M9TG11J4BS816008,2011,Proterra,27120,Low Floor Bus - Front and Rear Doors,,Battery Power,0,35660,ECORIDE BE35,2012-02-01,,True
+164,6,San 2,VIA,1M9TG11J6BS816009,2011,Proterra,26820,Low Floor Bus - Front and Rear Doors,,Battery Power,150,35660,ECORIDE BE35,1900-01-01,,True
+165,7,San 3,VIA,1M9TG11J2BS816010,2011,Proterra,0,Low Floor Bus - Front and Rear Doors,,Battery Power,150,35660,ECORIDE BE35,1900-01-01,,True
+166,-1,GE,GE,1M9TG11J8CS816014,2012,Proterra,0,Low Floor Bus - Front and Rear Doors,,Battery Power,0,0,ECORIDE BE35,2012-04-17,,True
+170,-1,CTE Ft. Lewis,CTE,1M9TG11J9BG816006,2011,,0,,,,0,0,ECORIDE BE35,1900-01-01,,True
+171,11,CTE NFCB1 (Austin),CTE,1M9TG11J59G816001,2009,Proterra,27150,Low Floor Bus - Front and Rear Doors,,,200,36660,35 Foot,2009-12-01,,True
+172,-1,CTE NFCB2,CTE,,0,,0,,,,0,0,ECORIDE BE35,1900-01-01,,True
+173,-1,Burbank,City of Burbank,1M9TG11J1AG816002,2010,Proterra,27880,Low Floor Bus - Front and Rear Doors,,Battery Powered Single Traction,210,33201,Proterra Ecoride Fuel Cell BE35,2010-08-17,,True
+174,1,FHT 1,Foothill Transit,1M9TG11J3AG816003,2010,Proterra,0,,,,0,0,ECORIDE BE35,1900-01-01,,True
+175,2,FHT 2,Foothill Transit,1M9TG11J5AG816004,2010,Proterra,0,,,,0,0,ECORIDE BE35,1900-01-01,,True
+176,3,FHT 3,Foothill Transit,1M9TG11J7AG816005,2010,Proterra,0,,,,0,0,ECORIDE BE35,1900-01-01,,True
+177,16,STOCKTON 01,Stockton,1M9TG16J9CS816015,2012,Proterra,28180,Low Floor Bus - Front and Rear Doors,,Battery Power,150,35660,ECORIDE BE35,2012-06-06,,True
+181,8,Tal 1,StarMetro,1M9TG11J2CS816011,2012,Proterra,28320,Low Floor Bus - Front and Rear Doors,EXPC1005E10,Battery Power,150,35660,ECORIDE BE35,2012-06-07,,True
+182,9,Tal 2,StarMetro,1M9TG16J3CS816012,2012,Proterra,28400,Low Floor Bus - Front and Rear Doors,EXPC1006G31,Battery Power,150,35660,ECORIDE BE35,2012-06-07,,True
+183,10,Tal 3,StarMetro,1M9TG16J5CS816013,2012,Proterra,28600,Low Floor Bus - Front and Rear Doors,EXCP1013L10,Battery Power,150,35660,ECORIDE BE35,2012-06-07,,True
+184,,GE,GE,1M9TG16J7CS816014,2012,Proterra,26040,Low Floor Bus - Front and Rear Doors,,Battery Power,150,35660,ECORIDE BE35,2012-06-07,,True
+185,17,STOCKTON 02,Stockton,1M9TG16J0CS816016,2012,Proterra,28220,Low Floor Bus - Front and Rear Doors,EXCP1012K10,Battery Power,150,35660,ECORIDE BE35,2012-07-17,,True
+186,27,Proterra 1,Proterra,1M9TG16J2CS816017,2012,Proterra,0,Low Floor Bus - Front and Rear Doors,CEC1001,Battery Power,0,35660,ECORIDE BE35,2012-08-09,,True
+187,28,Proterra 2,Proterra,1M9TG16J4CS816018,2012,Proterra,0,Low Floor Bus - Front and Rear Doors,CEC1002,Battery Power,0,0,ECORIDE BE35,2012-08-10,,True
+188,-1,NFCB2.1,CTE,1M9TG11J3CS816020,2012,Proterra,0,Low Floor Bus - Front and Rear Doors,EXCP1010J10,Fuel Cell,0,0,Proterra Ecoride Fuel Cell BE35,2012-10-29,,True
+189,29,Sen 2,Seneca,1M9TG16J6CS816019,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,CEC1003,Battery Power,220,0,ECORIDE BE35,2012-09-20,,True
+190,31,Sen 1,Seneca,1M9TG16J4CS816021,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,CEC1004,Battery Power,220,0,ECORIDE BE35,2012-11-09,,True
+191,32,Tal 4,StarMetro,1M9TG16J4DS816022,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,CEC1005,Battery Power,220,0,ECORIDE BE35,2013-01-18,,True
+192,33,Tal 5,StarMetro,1M9TG16J6DS816023,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,CEC1006,Battery Power,220,0,ECORIDE BE35,2013-01-18,,True
+193,34,Sen 3,Seneca ,1M9TG16J8DS816024,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,CEC1008,Battery Power,0,0,ECORIDE BE35,2013-02-13,,True
+194,35,Wor 1,Worcester,1M9TG16JXDS816025,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1001,Battery Power,0,0,ECORIDE BE35,2013-02-14,,True
+195,36,Wor 2,Worcester,1M9TG16J1DS816026,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1002,Battery Power,0,0,ECORIDE BE35,2013-02-14,,True
+196,37,Wor 3,Worcester,1M9TG16J3DS816027,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1003,Battery Power,0,0,ECORIDE BE35,2013-02-14,,True
+197,38,Wor 4,Worcester,1M9TG16J5DS816028,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1004,Battery Power,0,0,ECORIDE BE35,2013-02-14,,True
+198,39,Wor 5,Worcester,1M9TG16J7DS816029,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1005,Battery Power,0,0,ECORIDE BE35,2013-02-14,,True
+199,40,Sen 4,Seneca ,1M9TG16J3DS816030,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,CEC1007,Battery Power,0,0,ECORIDE BE35,2013-03-07,,True
+200,41,Wor 6,Worcester,1M9TG16J3DS816031,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1006,Battery Power,0,0,ECORIDE BE35,2013-05-15,,True
+201,42,Wor 7,Worcester,1M9TG16J7DS816032,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1029,Battery Power,0,0,ECORIDE BE35,2013-05-15,,False
+202,43,Wor 8,Worcester,1M9TG16J9DS816033,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1030,Battery Power,0,0,ECORIDE BE35,2013-05-15,,False
+203,44,Worcester 9,Worcester,1M9TG16J0DS816034,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1031,Battery Power,0,0,ECORIDE BE35,2013-05-15,,False
+204,45,Reno 1,Reno,1M9TG16J2DS816035,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1007,Battery Power,0,0,ECORIDE BE35,2013-05-15,,True
+205,46,Reno 2,Reno,1M9TG16J4DS816036,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1008,Battery Power,0,0,ECORIDE BE35,2013-05-15,,True
+206,47,Reno 3,Reno,1M9TG16J6DS816037,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1009,Battery Power,0,0,ECORIDE BE35,2013-05-15,,True
+207,48,Reno 4,Reno,1M9TG16J8DS816038,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1010,Battery Power,0,0,ECORIDE BE35,2013-05-15,,True
+208,49,Sen 5,Seneca,1M9TG16JXDS816039,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1023,Battery Power,0,0,ECORIDE BE35,2013-05-15,,True
+209,50,FHT 4,Foothill Transit,1M9TG16J6DS816040,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1011,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+210,51,FHT 5,Foothill Transit,1M9TG16J8DS816041,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1012,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+211,52,FHT 6,Foothill Transit,1M9TG16JXDS816042,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1013,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+212,53,FHT 7,Foothill Transit,1M9TG16J1DS816043,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1014,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+213,54,FHT 8,Foothill Transit,1M9TG16J3DS816044,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1015,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+214,55,FHT 9,Foothill Transit,1M9TG16J5DS816045,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1017,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+215,56,FHT 10,Foothill Transit,1M9TG16J7DS816046,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1018,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+216,57,FHT 11,Foothill Transit,1M9TG16J9DS816047,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1019,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+217,58,FHT 12,Foothill Transit,1M9TG16J0DS816048,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1020,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+218,59,FHT 13,Foothill Transit,1M9TG16J2DS816049,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1022,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+219,60,FHT 14,Foothill Transit,1M9TG16J9DS816050,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1021,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+220,61,FHT 15,Foothill Transit,1M9TG16J0DS816051,2013,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1016,Battery Power,0,0,ECORIDE BE35,2013-06-19,,True
+221,62,LOU1,Louisville Transit,1M9TG16J0ES816052,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1024,Battery Power,0,0,ECORIDE BE35,2013-10-02,,True
+222,63,LOU2,Louisville Transit,1M9TG16J2ES816053,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1025,Battery Power,0,0,ECORIDE BE35,2013-10-02,,True
+223,64,LOU3,Louisville Transit,1M9TG16J4ES816054,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1027,Battery Power,0,0,ECORIDE BE35,2013-10-02,,True
+224,65,LOU4,Louisville Transit,1M9TG16J6ES816055,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1026,Battery Power,0,0,ECORIDE BE35,2013-10-02,,True
+225,66,LOU5,Louisville Transit,1M9TG16J8ES816056,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1028,Battery Power,0,0,ECORIDE BE35,2013-10-02,,True
+226,67,LOU6,Louisville Transit,1M9TG16JXES816057,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1029,Battery Power,0,0,ECORIDE BE35,2013-11-20,,True
+227,68,LOU7,Louisville Transit,1M9TG16J1ES816058,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1030,Battery Power,0,0,ECORIDE BE35,2013-11-20,,True
+228,69,LOU8,Louisville Transit,1M9TG16J3ES816059,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1031,Battery Power,0,0,ECORIDE BE35,2013-11-20,,True
+229,70,LOU9,Louisville Transit,1M9TG16JXES816060,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1032,Battery Power,0,0,ECORIDE BE35,2013-11-20,,True
+230,71,LOU10,Louisville Transit,1M9TG16J1ES816061,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1033,Battery Power,0,0,ECORIDE BE35,2013-11-20,,True
+231,72,LOU11,Louisville Transit,1M9TG16J6ES816072,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1041,Battery Power,0,0,ECORIDE BE35,2014-06-18,,True
+232,72,Catalyst 1,Proterra,1M9TH16J7ES816062,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI-2-1001,Battery Power,0,0,ECORIDE BE40,2014-03-11,,True
+233,73,Catalyst 2,Proterra,1M9TH16J9ES816063,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI-2-1002,Battery Power,0,0,ECORIDE BE40,2014-03-11,,True
+234,74,Catalyst 3,Proterra,1M9TH16J0ES816064,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI-2-1003,Battery Power,0,0,ECORIDE BE40,2014-03-11,,True
+235,75,NASH1,Nashville Transit,1M9TG16J9ES816065,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1034,Battery Power,0,0,ECORIDE BE35,2014-03-17,,True
+236,76,NASH2,Nashville Transit,1M9TG16J0ES816066,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1035,Battery Power,0,0,ECORIDE BE35,2014-03-17,,True
+237,77,NASH3,Nashville Transit,1M9TG16J2ES816067,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1036,Battery Power,0,0,ECORIDE BE35,2014-03-17,,True
+238,78,NASH4,Nashville Transit,1M9TG16J4ES816068,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1037,Battery Power,0,0,ECORIDE BE35,2014-03-17,,True
+239,79,NASH5,Nashville Transit,1M9TG16J6ES816069,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1038,Battery Power,0,0,ECORIDE BE35,2014-03-17,,True
+240,80,NASH6,Nashville Transit,1M9TG16J2ES816070,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1039,Battery Power,0,0,ECORIDE BE35,2014-03-17,,True
+241,81,NASH7,Nashville Transit,1M9TG16J4ES816071,2014,Proterra,0,Low Floor Bus - Front and Rear Doors,TPI1040,Battery Power,0,0,ECORIDE BE35,2014-03-17,,True
