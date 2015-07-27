@@ -1,0 +1,13 @@
+Development  on 7/27/2015
+
+1. SlideOutTablePartition 
+   DECLARE @SlideWindow smallint = 21;
+   
+   [We changed from value of 10]
+   
+2. Pushed Battery Static Report to Production
+   file Updated 
+   C:\Reports\VinStaticReportApp\GenerateStaticVinReports.exe
+   
+3. Tested the Battery, Weekly, NREL and Daily Reports with previous
+
