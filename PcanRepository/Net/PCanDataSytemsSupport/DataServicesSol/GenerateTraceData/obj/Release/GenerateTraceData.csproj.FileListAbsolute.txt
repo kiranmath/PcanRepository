@@ -1,0 +1,5 @@
+D:\Project\DataServices\DataServicesSol\GenerateTraceData\bin\Release\GenerateTraceData.exe.config
+D:\Project\DataServices\DataServicesSol\GenerateTraceData\bin\Release\GenerateTraceData.exe
+D:\Project\DataServices\DataServicesSol\GenerateTraceData\bin\Release\GenerateTraceData.pdb
+D:\Project\DataServices\DataServicesSol\GenerateTraceData\obj\Release\GenerateTraceData.exe
+D:\Project\DataServices\DataServicesSol\GenerateTraceData\obj\Release\GenerateTraceData.pdb
