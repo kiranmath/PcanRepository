@@ -50,6 +50,118 @@ namespace GenerateStaticVinReports
 
 
 
+        public Customers GetCustomerInfo()
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["PCanRepository"].ConnectionString;
+            string sql = "SELECT CustomerID,CustomerName from dbo.Customers with(nolock)  where isActive = 1 ";
+            Customers c = new Customers();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+
+
+                SqlCommand cmd = new SqlCommand(sql, con);
+
+                try
+                {
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+
+
+                        c.CustomerID = int.Parse(reader["CustomerID"].ToString());
+                        c.CustomerName = reader["CustomerName"].ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                return c;
+            }
+        }
+
+
+
+        public DataTable DtGetCustomerInfo(DateTime @ProcessDate)
+        {
+
+            var connectionString = ConfigurationManager.ConnectionStrings["PCanRepository"].ConnectionString;
+           // string sql = "SELECT CustomerID,CustomerName from dbo.Customers with(nolock)  where isActive = 1 ";
+            string sql = "DataSystem_SummaryTables_GetByDayActiveCustomer";
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@ProcessDate", SqlDbType.Date);
+                cmd.Parameters["@ProcessDate"].Value = ProcessDate;
+
+                try
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                    return dt;
+                }
+                catch
+                {
+                    return dt;
+                }
+
+                finally
+                {
+                    dt.Dispose();
+                }
+
+
+            }
+        }
+
+
+        public DataTable DtGetCustomerVehicleInfo(int CustomerID, DateTime @ProcessDate)
+        {
+
+            var connectionString = ConfigurationManager.ConnectionStrings["PCanRepository"].ConnectionString;
+            //string sql = "select VinID, VIN, Bus from VehiclesVw where customerID = @CustomerID ";
+            string sql = "DataSystem_SummaryTables_GetByDayActiveVin";
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@CustomerID", SqlDbType.Int);
+                cmd.Parameters["@CustomerID"].Value = CustomerID;
+
+                cmd.Parameters.Add("@ProcessDate", SqlDbType.Date);
+                cmd.Parameters["@ProcessDate"].Value = ProcessDate;
+
+                try
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                    return dt;
+                }
+                catch
+                {
+                    return dt;
+                }
+
+                finally
+                {
+                    dt.Dispose();
+                }
+
+
+            }
+        }
+
+
         public void UdpdateReportLog(int ReportID)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["PCanRepository"].ConnectionString;
@@ -75,19 +187,18 @@ namespace GenerateStaticVinReports
 
         }
 
-        
+
 
 
         public VinReportParam GetActionReportRow()
         {
             var connectionString = ConfigurationManager.ConnectionStrings["PCanRepository"].ConnectionString;
-           // string sql = "SELECT CustomerID,CustomerName, Bus, BusOwner,Vin,VinID from dbo.VehiclesVw with(nolock) where VinID=@VinID";
+            // string sql = "SELECT CustomerID,CustomerName, Bus, BusOwner,Vin,VinID from dbo.VehiclesVw with(nolock) where VinID=@VinID";
             string sql = "select ID,vinID, ProcessDate,WeekNumber, YearNumber, ReportPeriod  from DataSystem_SummaryTable_DataReportGeneration with(nolock)  where ID = ( select min(ID) from DataSystem_SummaryTable_DataReportGeneration with(nolock) where ReportProduced = 0 )";
             VinReportParam r = new VinReportParam();
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-
 
                 SqlCommand cmd = new SqlCommand(sql, con);
                 //cmd.Parameters.Add("@VinID", SqlDbType.Int);
@@ -118,15 +229,15 @@ namespace GenerateStaticVinReports
 
         public static Boolean CheckDataExists(string VinID, string ProcessDate, string ReportPeriod, string WeekNumber, string YearNumber)
         {
-           
+
             decimal MilesTravelled = 0;
 
             var connectionString = ConfigurationManager.ConnectionStrings["PCanRepository"].ConnectionString;
             string sql = String.Empty;
             if (ReportPeriod == "Weekly" || ReportPeriod == "NREL")
             {
-                 
-                 sql = "select IsNull(TotalMiles_m,0) TotalMiles_m from [dbo].[DataSystem_SummaryTables_VinDashBoard] with(nolock) where VinID=@VinID AND WeekNumber = Convert(int,@WeekNumber) AND  YearNumber = Convert(int,@YearNumber) AND ReportPeriod='W'";
+
+                sql = "select IsNull(TotalMiles_m,0) TotalMiles_m from [dbo].[DataSystem_SummaryTables_VinDashBoard] with(nolock) where VinID=@VinID AND WeekNumber = Convert(int,@WeekNumber) AND  YearNumber = Convert(int,@YearNumber) AND ReportPeriod='W'";
 
             }
             else
@@ -140,7 +251,7 @@ namespace GenerateStaticVinReports
             bool IsVinNumeric = int.TryParse(VinID, out intVinID);
 
             DateTime dtProcessDate;
-           bool IsProcessDate = DateTime.TryParse(ProcessDate,out dtProcessDate);
+            bool IsProcessDate = DateTime.TryParse(ProcessDate, out dtProcessDate);
 
 
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -173,8 +284,8 @@ namespace GenerateStaticVinReports
                         cmd.Parameters.Add("@YearNumber", SqlDbType.Int);
                         cmd.Parameters["@YearNumber"].Value = intYearNumber;
                     }
-                    
-                   
+
+
                 }
                 else
                 {
@@ -184,7 +295,7 @@ namespace GenerateStaticVinReports
 
 
 
-            
+
 
                 string p = cmd.CommandText;
                 try
@@ -209,12 +320,100 @@ namespace GenerateStaticVinReports
                 }
                 else
                 {
-                    return false;
+                    return true;
                 }
 
 
             }
 
         }
+
+        public DataTable Dt_DailyGrab_GetBatteryDashAllCust(DateTime ProcessDate, int Rounding)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["PCanRepository"].ConnectionString;
+            string sql = "ReportServices_DailyGrab_GetBatteryAllCust";
+
+
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+
+
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@ProcessDate", SqlDbType.Date);
+                cmd.Parameters["@ProcessDate"].Value = ProcessDate;
+
+
+                cmd.Parameters.Add("@Rouding", SqlDbType.Int);
+                cmd.Parameters["@Rouding"].Value = Rounding;
+
+
+                try
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                    return dt;
+                }
+                catch
+                {
+                    return dt;
+                }
+
+                finally
+                {
+                    dt.Dispose();
+                }
+            }
+        }
+
+
+
+        public DataTable GetDashBoardDataTabular(int VinID, DateTime ProcessDate, string Group)
+        {
+
+
+            var connectionString = ConfigurationManager.ConnectionStrings["PCanRepository"].ConnectionString;
+            string sql = "ReportServices_DailyGrab_GetBatteryDashbyPacks";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+
+
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@VinID", SqlDbType.Int);
+                cmd.Parameters["@VinID"].Value = VinID;
+
+                cmd.Parameters.Add("@ProcessDate", SqlDbType.Date);
+                cmd.Parameters["@ProcessDate"].Value = ProcessDate;
+
+                cmd.CommandTimeout = 300;
+
+                try
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                    return dt;
+                }
+                catch
+                {
+                    return dt;
+                }
+
+                finally
+                {
+                    dt.Dispose();
+                }
+
+
+            }
+        }
+
     }
 }

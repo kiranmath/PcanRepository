@@ -67,6 +67,12 @@ namespace GenerateStaticVinReports
 
                     rp = "DailyBattery";
                 }
+
+                else if (value == "A")
+                {
+
+                    rp = "DailyBatteryAllCust";
+                }
                 else
                 {
                     rp = "Weekly";

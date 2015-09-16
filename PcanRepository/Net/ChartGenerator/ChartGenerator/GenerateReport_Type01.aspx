@@ -28,9 +28,8 @@
 <body>
     <form id="form1" runat="server">
     <div>
-       <highcharts:LineChart ID="hcVendas" Width="500" Height="250" runat="server" RenderType="line" />
- 
-        
+       <highcharts:LineChart ID="hcVendas" Width="900" Height="400" runat="server" RenderType="spline" />
+     
 
 
     </div>

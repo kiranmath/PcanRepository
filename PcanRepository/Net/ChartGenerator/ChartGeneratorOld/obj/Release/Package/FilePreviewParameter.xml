@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="ReportGen" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\kmath\\documents\\visual\ studio\ 2013\\Projects\\ChartGenerator\\ChartGenerator\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\kmath\\documents\\visual\ studio\ 2013\\Projects\\ChartGenerator\\ChartGenerator\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="DefaultConnection-Web.config Connection String" description="" value="Data Source=.\SQLEXPRESS;AttachDbFilename=|DataDirectory|\aspnet-ChartGenerator-20150423101422.mdf;Initial Catalog=aspnet-ChartGenerator-20150423101422;Integrated Security=True;User Instance=True" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\kmath\\documents\\visual\ studio\ 2013\\Projects\\ChartGenerator\\ChartGenerator\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+  <parameter name="PCanRepository-Web.config Connection String" description="" value="Data Source=DBHOST-01\Fleet_data;Initial Catalog=PCanRepository;Integrated Security=true" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\kmath\\documents\\visual\ studio\ 2013\\Projects\\ChartGenerator\\ChartGenerator\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='PCanRepository']/@connectionString" />
+  </parameter>
+  <parameter name="PCanRepository_est-Web.config Connection String" description="" value="Data Source=GR1334\SQL10;Initial Catalog=PCanRepository;Integrated Security=true" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\kmath\\documents\\visual\ studio\ 2013\\Projects\\ChartGenerator\\ChartGenerator\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='PCanRepository_est']/@connectionString" />
+  </parameter>
+</parameters>

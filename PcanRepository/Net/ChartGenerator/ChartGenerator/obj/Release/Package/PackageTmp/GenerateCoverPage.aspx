@@ -10,21 +10,15 @@
 <body>
     <form id="CoverPage" runat="server">
   
-   <p id="rcorners2">
-     
-         <label runat="server" id="lblHead"><b> Daily Grab Automated Reports</b> </label>
+   <p id="rcorners2">     
+         <label runat="server" id="lblHead" ><b> Daily Grab Automated Reports</b> </label>
          <label id="lblVin" runat="server"> </label>
-         <label id="lblDate" runat="server"> </label>
-       
-
- 
-
+         <label id="lblDate" runat="server"> </label>   
    </p>
+   <p id ="p2i">
    <br />
-
-      <p id ="p2i">
-   <img src="Images/Splash.png"  style="border-style: none"/>
-       </p> 
+   <img src="Images/Splash.png"  style="border-style: none" id="splashImg" runat="server"/>
+   </p> 
 
         <div id ="footer"></div>
     </form>

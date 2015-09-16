@@ -169,11 +169,13 @@
     <Content Include="Content\TabData.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="GenerateChart_Bk.aspx" />
+    <Content Include="GenerateChart_Pie.aspx" />
     <Content Include="GenerateChart_SoC.aspx" />
     <Content Include="GenerateChart_Type_Column.aspx" />
     <Content Include="GenerateCoverPage.aspx" />
     <Content Include="GenerateReport_Type01.aspx" />
     <Content Include="GenerateTable_VinDashboard.aspx" />
+    <Content Include="GenerateTable_VinDashboard_Battery.aspx" />
     <Content Include="GenerateTable_VinDashboard_NREL.aspx" />
     <Content Include="GenerateTable_VinDashboard_Tabular.aspx" />
     <Content Include="packages.config" />
@@ -278,6 +280,7 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Chargers.cs" />
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -285,6 +288,7 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Data.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -298,6 +302,13 @@
     </Compile>
     <Compile Include="GenerateChart_Bk.aspx.designer.cs">
       <DependentUpon>GenerateChart_Bk.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateChart_Pie.aspx.cs">
+      <DependentUpon>GenerateChart_Pie.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerateChart_Pie.aspx.designer.cs">
+      <DependentUpon>GenerateChart_Pie.aspx</DependentUpon>
     </Compile>
     <Compile Include="GenerateChart_SoC.aspx.cs">
       <DependentUpon>GenerateChart_SoC.aspx</DependentUpon>
@@ -333,6 +344,13 @@
     </Compile>
     <Compile Include="GenerateTable_VinDashboard.aspx.designer.cs">
       <DependentUpon>GenerateTable_VinDashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateTable_VinDashboard_Battery.aspx.cs">
+      <DependentUpon>GenerateTable_VinDashboard_Battery.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerateTable_VinDashboard_Battery.aspx.designer.cs">
+      <DependentUpon>GenerateTable_VinDashboard_Battery.aspx</DependentUpon>
     </Compile>
     <Compile Include="GenerateTable_VinDashboard_NREL.aspx.cs">
       <DependentUpon>GenerateTable_VinDashboard_NREL.aspx</DependentUpon>

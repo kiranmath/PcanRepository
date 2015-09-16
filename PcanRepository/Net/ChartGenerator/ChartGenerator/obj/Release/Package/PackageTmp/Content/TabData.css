@@ -51,7 +51,7 @@
     border-radius: 25px;
     border: 4px solid #8AC007;
     padding: 20px;   
-    height: 180px; 
+    height: 100px; 
     display: block;
     align-items: center;
     align-content:center;
@@ -69,5 +69,7 @@
 }
 
 
+
 td.gettop {vertical-align: top;}
 td{vertical-align:text-top;}
+

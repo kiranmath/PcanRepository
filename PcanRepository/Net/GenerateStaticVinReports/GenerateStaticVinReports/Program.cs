@@ -115,7 +115,20 @@ namespace GenerateStaticVinReports
             }
 
 
-            if (VinID != String.Empty)
+            if (ReportPeriod=="DailyBatteryAllCust")
+            {
+
+               // CheckFolderPath(ReportFolderPath, TempFolderPath, Vin, CustomerName, ReportPeriod);
+                string FolderName = "DailyBatteryAllCust";
+                CheckFolderPathWithFoldName(ReportFolderPath, TempFolderPath, FolderName);
+                CreateReportImage(WebAddress, TempFolderPath, FolderName, ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+                CreateReportBatteryAllCustPdf(ReportFolderPath, TempFolderPath, ImageFolderPath, Vin, ProcessDate, CustomerName, ReportPeriod, WeekNumber, YearNumber,
+                         ReportID);
+            }
+
+
+
+            if (VinID != String.Empty && ReportPeriod != "DailyBatteryAllCust")
             {          
                 GetVehicleDetails(VinID, ref Vin, ref CustomerName);
 
@@ -143,27 +156,54 @@ namespace GenerateStaticVinReports
 
         }
 
+        private static void CreateReportBatteryAllCustPdf(string ReportFolderPath, string TempFolderPath, string ImageFolderPath, string Vin, string ProcessDate, string CustomerName, string ReportPeriod, string WeekNumber, string YearNumber, int ReportID)
+        {
+            string ImageFileName = Path.Combine(ImageFolderPath, "splash.png");
+            string RptImageFolder = Path.Combine(TempFolderPath,"DailyBatteryAllCust");
+
+            
+            CreateReports CrtPdf = new CreateReports();
+            Random r = new Random();
+            int rano = r.Next(1000, 9999);
+            string PdfFolder = Path.Combine(ReportFolderPath, "DailyBatteryAllCust");
+            string ReportFileName = String.Empty;
+
+            ReportFileName = Path.Combine(PdfFolder, "DailyBatteryReport_AllCust" + "_" + ProcessDate.Replace("/", "") + "_" + rano + ".pdf");
+
+            CrtPdf.SetUp(ReportFileName, Vin, ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+            CrtPdf.GenPdfDailyBatteryAllCust(RptImageFolder, ImageFileName, ReportPeriod,ProcessDate);
+            //   CrtPdf.getImage(VinId, ProcessDate, WebAddress, ImageFolder);
+            CrtPdf.TearDown();
+
+
+            GetData VinRptData = new GetData();
+            VinRptData.UdpdateReportLog(ReportID);
+
+        }
+
         private static void CreateReportPdf(string ReportFolderPath, string TempFolderPath, string ImageFolderPath, string Vin, string ProcessDate, string CustomerName, string ReportPeriod, string WeekNumber, string YearNumber, int ReportID)
         {
             CreateReports CrtPdf = new CreateReports();
 
+            Random r = new Random();
+            int rano = r.Next(1000, 9999);
             string PdfFolder = Path.Combine(ReportFolderPath, CustomerName, Vin, ReportPeriod);
             string ReportFileName = String.Empty;
             if (ReportPeriod == "Weekly")
             {
-                ReportFileName = Path.Combine(PdfFolder, "WeeklyVinReport_" + Vin + "_" + WeekNumber + "_" + YearNumber + ".pdf");
+                ReportFileName = Path.Combine(PdfFolder, "WeeklyVinReport_"  + Vin + "_" + WeekNumber + "_" + YearNumber + "_" + rano + ".pdf");
             }
             else if (ReportPeriod == "NREL")
             {
-                ReportFileName = Path.Combine(PdfFolder, "NRELVinReport_" + Vin + "_" + WeekNumber + "_" + YearNumber + ".pdf");
+                ReportFileName = Path.Combine(PdfFolder, "NRELVinReport_" + Vin + "_" + WeekNumber + "_" + YearNumber + "_" + rano + ".pdf");
             }
             else if (ReportPeriod == "DailyBattery")
             {
-                ReportFileName = Path.Combine(PdfFolder, "DailyBatteryReport_" + Vin + "_" + WeekNumber + "_" + YearNumber + ".pdf");
+                ReportFileName = Path.Combine(PdfFolder, "DailyBatteryReport_" + Vin + "_" + ProcessDate.Replace("/", "") + "_" + rano + ".pdf");
             }
             else
             {
-                ReportFileName = Path.Combine(PdfFolder, "DailyVinReport_" + Vin + "_" + ProcessDate.Replace("/", "") + ".pdf");
+                ReportFileName = Path.Combine(PdfFolder, "DailyVinReport_" + Vin + "_" + ProcessDate.Replace("/", "") + "_" + rano + ".pdf");
             }
 
      
@@ -179,6 +219,17 @@ namespace GenerateStaticVinReports
 
             GetData VinRptData = new GetData();
             VinRptData.UdpdateReportLog(ReportID);
+
+        }
+
+        private static void CreateReportImage(string WebAddress, string TempFolderPath, string FoldName, string ProcessDate, string ReportPeriod, string WeekNumber, string YearNumber)
+        {
+            CreateImages CrtImg = new CreateImages();
+            CrtImg.SetUp();
+            string ImageFolder = Path.Combine(TempFolderPath, FoldName);
+            CrtImg.getImage(ProcessDate, WebAddress, ImageFolder, ReportPeriod, WeekNumber, YearNumber);
+            CrtImg.TearDown();
+
 
         }
 
@@ -218,6 +269,44 @@ namespace GenerateStaticVinReports
 
            
         }
+
+        private static void CheckFolderPathWithFoldName(string ReportFolderPath, string TempFolderPath,string FoldName)
+        {
+
+            string rptPath = Path.Combine(ReportFolderPath, FoldName);
+            string tempPath = Path.Combine(TempFolderPath, FoldName);
+            try
+            {
+                // If the directory doesn't exist, create it.
+                if (!Directory.Exists(rptPath))
+                {
+                    Directory.CreateDirectory(rptPath);
+
+                }
+
+                if (!Directory.Exists(tempPath))
+                {
+                    Directory.CreateDirectory(tempPath);
+                }
+                else
+                {
+                    DirectoryInfo tempImagMessageInfo = new DirectoryInfo(tempPath);
+
+                    foreach (FileInfo file in tempImagMessageInfo.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                }
+
+
+            }
+            catch (Exception)
+            {
+                // Fail silently
+            }
+
+        }
+        
 
         private static void CheckFolderPath(string ReportFolderPath, String TempFolderPath, string Vin, string CustomerName, String ReportPeriod)
         {

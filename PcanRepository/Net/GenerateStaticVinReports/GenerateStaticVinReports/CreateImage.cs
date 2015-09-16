@@ -8,6 +8,8 @@ using OpenQA.Selenium.PhantomJS;
 using System.Drawing.Imaging;
 using OpenQA.Selenium.IE;
 using System.IO;
+using System.Drawing;
+using System.Data;
 
 namespace GenerateStaticVinReports
 {
@@ -100,6 +102,16 @@ namespace GenerateStaticVinReports
             _driver.WaitUntil(d => d.FindElement(By.Id("footer")).Equals(true));
             ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(@ImagePath, ImageFormat.Png);
 
+
+
+
+            WebParam = string.Format("GenerateChart_Type_Column.aspx?VinID={0}&ProcessDate={1}&ReportPeriod={2}&ReportType=GenVehicleData_VinChgEnergyHist&WeekNumber={3}&YearNumber={4}", VinID, ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+            WebUrl = new Uri(websiteName, WebParam);
+            ImagePath = Path.Combine(ImageFolder, "VinChgEnergyHist.png");
+            _driver.Navigate().GoToUrl(WebUrl);
+            _driver.WaitUntil(d => d.FindElement(By.Id("footer")).Equals(true));
+            ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(@ImagePath, ImageFormat.Png);
+
         }
 
 
@@ -153,6 +165,58 @@ namespace GenerateStaticVinReports
 
            
        }
+
+       private void getImageDailyBatteryByVin(string VinID, string ProcessDate, string WebAddress, string ImageFolder, string ReportPeriod, string WeekNumber, string YearNumber)
+       {
+           string WebParam;
+           Uri WebUrl;
+           string ImagePath;
+           Uri websiteName = new Uri(WebAddress);
+
+           WebParam = string.Format("GenerateTable_VinDashboard_Tabular.aspx?VinID={0}&ProcessDate={1}&ReportPeriod={2}&ReportType=DailyBatteryData&WeekNumber={3}&YearNumber={4}", VinID, ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+           WebUrl = new Uri(websiteName, WebParam);
+           ImagePath = Path.Combine(ImageFolder, string.Format("VinDashBoard_{0}.png",VinID));
+           _driver.Navigate().GoToUrl(WebUrl);
+           _driver.WaitUntil(d => d.FindElement(By.Id("footer")).Equals(true));
+           ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(@ImagePath, ImageFormat.Png);
+
+
+           WebParam = string.Format("GenerateReport_Type01.aspx?VinID={0}&ProcessDate={1}&ReportPeriod={2}&ReportType=GenVehicleData_SoCByPacks_Min&WeekNumber={3}&YearNumber={4}", VinID, ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+           WebUrl = new Uri(websiteName, WebParam);
+           ImagePath = Path.Combine(ImageFolder, string.Format("SoCByPacks_Min_{0}.png", VinID));
+           _driver.Navigate().GoToUrl(WebUrl);
+           _driver.WaitUntil(d => d.FindElement(By.Id("footer")).Equals(true));
+           ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(@ImagePath, ImageFormat.Png);
+
+
+           WebParam = string.Format("GenerateReport_Type01.aspx?VinID={0}&ProcessDate={1}&ReportPeriod={2}&ReportType=GenVehicleData_SoCByPacks_Max&WeekNumber={3}&YearNumber={4}", VinID, ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+           WebUrl = new Uri(websiteName, WebParam);
+           ImagePath = Path.Combine(ImageFolder, string.Format("SoCByPacks_Max_{0}.png", VinID));
+           _driver.Navigate().GoToUrl(WebUrl);
+           _driver.WaitUntil(d => d.FindElement(By.Id("footer")).Equals(true));
+           ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(@ImagePath, ImageFormat.Png);
+
+
+
+           WebParam = string.Format("GenerateReport_Type01.aspx?VinID={0}&ProcessDate={1}&ReportPeriod={2}&ReportType=GenVehicleData_TMaxByPacks&WeekNumber={3}&YearNumber={4}", VinID, ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+           WebUrl = new Uri(websiteName, WebParam);
+           ImagePath = Path.Combine(ImageFolder, string.Format("TMaxByPacks_{0}.png", VinID));
+           _driver.Navigate().GoToUrl(WebUrl);
+           _driver.WaitUntil(d => d.FindElement(By.Id("footer")).Equals(true));
+           ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(@ImagePath, ImageFormat.Png);
+
+
+
+           WebParam = string.Format("GenerateReport_Type01.aspx?VinID={0}&ProcessDate={1}&ReportPeriod={2}&ReportType=GenVehicleData_CurrentByPacks&WeekNumber={3}&YearNumber={4}", VinID, ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+           WebUrl = new Uri(websiteName, WebParam);
+           ImagePath = Path.Combine(ImageFolder, string.Format("CurrentByPacks_{0}.png", VinID));
+           _driver.Navigate().GoToUrl(WebUrl);
+           _driver.WaitUntil(d => d.FindElement(By.Id("footer")).Equals(true));
+           ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(@ImagePath, ImageFormat.Png);
+
+
+       }
+
 
 
        private void getImageWeekly(string VinID, string ProcessDate, string WebAddress, string ImageFolder, string ReportPeriod, string WeekNumber, string YearNumber)
@@ -572,6 +636,80 @@ namespace GenerateStaticVinReports
 
        }
 
+       public void getImage(string ProcessDate, string WebAddress, string ImageFolder, string ReportPeriod, string WeekNumber, string YearNumber)
+       {
+
+           string WebParam;
+           Uri WebUrl;
+           string ImagePath;
+           Uri websiteName = new Uri(WebAddress);
+
+
+
+           WebParam = string.Format("GenerateCoverPage.aspx?VinID={0}&ProcessDate={1}&ReportPeriod={2}&ReportType=CoverPage&WeekNumber={3}&YearNumber={4}", "0", ProcessDate, ReportPeriod, WeekNumber, YearNumber);
+           WebUrl = new Uri(websiteName, WebParam);
+           ImagePath = Path.Combine(ImageFolder, "VinCoverPage.png");
+           _driver.Navigate().GoToUrl(WebUrl);
+           _driver.WaitUntil(d => d.FindElement(By.Id("footer")).Equals(true));
+           _driver.Manage().Window.Size = new Size(400, 90);
+           ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile(@ImagePath, ImageFormat.Png);
+           //_driver.Close();
+           //_driver.Quit();
+           switch (ReportPeriod)
+           {
+               
+               case "DailyBatteryAllCust":
+                   getImageDailyBatteryAllCust( ProcessDate, WebAddress, ImageFolder, ReportPeriod, WeekNumber, YearNumber);
+                   break;
+               default:
+
+                   break;
+           }
+
+
+
+
+       }
+
+       private void getImageDailyBatteryAllCust(string ProcessDate, string WebAddress, string ImageFolder, string ReportPeriod, string WeekNumber, string YearNumber)
+       {
+         //  throw new NotImplementedException();
+
+            //string WebParam;
+            //Uri WebUrl;
+            //string ImagePath;
+            //Uri websiteName = new Uri(WebAddress);
+            string CustomerId = string.Empty;
+
+            DataTable dtCust = new DataTable();
+               DataTable dtVin = new DataTable();
+           GetData gd = new GetData();
+           dtCust = gd.DtGetCustomerInfo(DateTime.Parse(ProcessDate));
+
+           int i = 0;
+           int j = 0;
+           foreach (DataRow dRow in dtCust.Rows)
+           {
+
+               i++;
+               j = 0;
+               CustomerId = dRow["CustomerId"].ToString();
+               dtVin = gd.DtGetCustomerVehicleInfo(int.Parse(CustomerId), DateTime.Parse(ProcessDate));
+
+               foreach (DataRow vRow in dtVin.Rows)
+               {
+                                    
+                   j++;
+                   getImageDailyBatteryByVin(vRow["VinID"].ToString(), ProcessDate, WebAddress, ImageFolder, ReportPeriod, WeekNumber, YearNumber);
+               }
+
+
+           }
+
+
+       }
+
+
         public void getImage(string VinID, string ProcessDate,string WebAddress, string ImageFolder, string ReportPeriod, string WeekNumber, string YearNumber)
         {
 
@@ -623,6 +761,9 @@ namespace GenerateStaticVinReports
             _driver.Quit();
            
         }
+
+
+      
 
     }
 }

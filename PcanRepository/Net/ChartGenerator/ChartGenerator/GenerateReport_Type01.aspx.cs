@@ -43,7 +43,7 @@ namespace ChartGenerator
                     GetChartData gcd = new GetChartData();
                     Vehicle = gcd.GetVinInfo(intVinID);
 
-
+             
 
                 }
                 else
@@ -403,11 +403,12 @@ namespace ChartGenerator
             string subTitle = string.Format("{0} - {1}", v.CustomerName, v.Vin);
             hcVendas.Title = new Title(mainTitle);
             hcVendas.SubTitle = new SubTitle(subTitle);
-
+          
             hcVendas.Theme = "grid";
+     
             hcVendas.Legend = new Legend { align = Align.right, layout = Layout.vertical, verticalAlign = VerticalAlign.top, x = -10, y = 70, borderWidth = 0 };
             hcVendas.Appearance = new Appearance { renderTo = "container", animation = false };
-            hcVendas.YAxis.Add(new YAxisItem { title = new Title(string.Format("Soc {0}  % ", dtypeLabel)) });
+            hcVendas.YAxis.Add(new YAxisItem { title = new Title(string.Format("Soc {0}  % ", dtypeLabel)), minorGridLineWidth = 0, gridLineWidth = 0 });
 
             hcVendas.XAxis.Add(new XAxisItem { type = AxisDataType.datetime, dateTimeLabelFormats = new DateTimeLabelFormats { hour = "%H" }, title = new Title("Time in Hours") });
 
@@ -435,7 +436,7 @@ namespace ChartGenerator
             var pointCollectionSocMaxPack6 = new PointCollection();
             var pointCollectionSocMaxPack7 = new PointCollection();
 
-
+           
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -443,6 +444,7 @@ namespace ChartGenerator
                 if (dtype == "MinSoC")
                 {
                     // pointCollectionSocMin.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCes_usi_SoCMin_pct"])));
+                         //.pointCollectionSocMin.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCes_usi_SoCmin_pct"])));
                     pointCollectionSocMinPack0.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm0_usi_SoCMin_pct"])));
                     pointCollectionSocMinPack1.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm1_usi_SoCMin_pct"])));
                     pointCollectionSocMinPack2.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm2_usi_SoCMin_pct"])));
@@ -450,13 +452,27 @@ namespace ChartGenerator
                     pointCollectionSocMinPack4.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm4_usi_SoCMin_pct"])));
                     pointCollectionSocMinPack5.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm5_usi_SoCMin_pct"])));
                     pointCollectionSocMinPack6.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm6_usi_SoCMin_pct"])));
-                    pointCollectionSocMinPack7.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm7_usi_SoCMin_pct"])));
+                    pointCollectionSocMinPack7.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm7_usi_SoCMin_pct"]),System.Drawing.Color.Black));
+
+
+                    //pointCollectionSocMinPack0.Add(new Point(Convert.ToInt64(1), Convert.ToDouble(row["PCpm0_usi_SoCMin_pct"])));
+                    //pointCollectionSocMinPack1.Add(new Point(Convert.ToInt64(2), Convert.ToDouble(row["PCpm1_usi_SoCMin_pct"])));
+                    //pointCollectionSocMinPack2.Add(new Point(Convert.ToInt64(3), Convert.ToDouble(row["PCpm2_usi_SoCMin_pct"])));
+                    //pointCollectionSocMinPack3.Add(new Point(Convert.ToInt64(4), Convert.ToDouble(row["PCpm3_usi_SoCMin_pct"])));
+                    //pointCollectionSocMinPack4.Add(new Point(Convert.ToInt64(5), Convert.ToDouble(row["PCpm4_usi_SoCMin_pct"])));
+                    //pointCollectionSocMinPack5.Add(new Point(Convert.ToInt64(6), Convert.ToDouble(row["PCpm5_usi_SoCMin_pct"])));
+                    //pointCollectionSocMinPack6.Add(new Point(Convert.ToInt64(7), Convert.ToDouble(row["PCpm6_usi_SoCMin_pct"])));
+                    //pointCollectionSocMinPack7.Add(new Point(Convert.ToInt64(8), Convert.ToDouble(row["PCpm7_usi_SoCMin_pct"])));
 
                 }
+                    
+
                 else if (dtype == "MaxSoC")
                 {
 
                     // pointCollectionSocMax.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCes_usi_SoCMax_pct"])));
+
+
                     pointCollectionSocMaxPack0.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm0_usi_SoCMax_pct"])));
                     pointCollectionSocMaxPack1.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm1_usi_SoCMax_pct"])));
                     pointCollectionSocMaxPack2.Add(new Point(Convert.ToInt64((DateTime.Parse(row["Time_Occur"].ToString()).Subtract(new DateTime(2015, 1, 1))).TotalMilliseconds), Convert.ToDouble(row["PCpm2_usi_SoCMax_pct"])));
@@ -480,14 +496,14 @@ namespace ChartGenerator
 
                 var seriesMin = new Collection<Serie> { 
                    //  new Serie { name = "SocMin", data = pointCollectionSocMin.ToArray() },
-                     new Serie { name = "SocMinPack0", data = pointCollectionSocMinPack0.ToArray() }, 
-                     new Serie { name = "SocMinPack1", data = pointCollectionSocMinPack1.ToArray() }, 
-                     new Serie { name = "SocMinPack2", data = pointCollectionSocMinPack2.ToArray() }, 
-                     new Serie { name = "SocMinPack3", data = pointCollectionSocMinPack3.ToArray() }, 
-                     new Serie { name = "SocMinPack4", data = pointCollectionSocMinPack4.ToArray() }, 
-                     new Serie { name = "SocMinPack5", data = pointCollectionSocMinPack5.ToArray() }, 
-                     new Serie { name = "SocMinPack6", data = pointCollectionSocMinPack6.ToArray() },                  
-                     new Serie { name = "SocMinPack7", data = pointCollectionSocMinPack7.ToArray() } 
+                     new Serie { name = "P0", data = pointCollectionSocMinPack0.ToArray() }, 
+                     new Serie { name = "P1", data = pointCollectionSocMinPack1.ToArray() }, 
+                     new Serie { name = "P2", data = pointCollectionSocMinPack2.ToArray() }, 
+                     new Serie { name = "P3", data = pointCollectionSocMinPack3.ToArray() }, 
+                     new Serie { name = "P4", data = pointCollectionSocMinPack4.ToArray() }, 
+                     new Serie { name = "P5", data = pointCollectionSocMinPack5.ToArray() }, 
+                     new Serie { name = "P6", data = pointCollectionSocMinPack6.ToArray() },                  
+                     new Serie { name = "P7", data = pointCollectionSocMinPack7.ToArray(),color="Grey" } 
                  };
 
                 hcVendas.DataSource = seriesMin;
@@ -498,14 +514,14 @@ namespace ChartGenerator
 
                 var seriesMax = new Collection<Serie> { 
                      //new Serie { name = "SocMax", data = pointCollectionSocMax.ToArray() },
-                     new Serie { name = "SocMaxPack0", data = pointCollectionSocMaxPack0.ToArray() }, 
-                     new Serie { name = "SocMaxPack1", data = pointCollectionSocMaxPack1.ToArray() }, 
-                     new Serie { name = "SocMaxPack2", data = pointCollectionSocMaxPack2.ToArray() }, 
-                     new Serie { name = "SocMaxPack3", data = pointCollectionSocMaxPack3.ToArray() }, 
-                     new Serie { name = "SocMaxPack4", data = pointCollectionSocMaxPack4.ToArray() }, 
-                     new Serie { name = "SocMaxPack5", data = pointCollectionSocMaxPack5.ToArray() }, 
-                     new Serie { name = "SocMaxPack6", data = pointCollectionSocMaxPack6.ToArray() },                  
-                     new Serie { name = "SocMaxPack7", data = pointCollectionSocMaxPack7.ToArray() } 
+                     new Serie { name = "P0", data = pointCollectionSocMaxPack0.ToArray() }, 
+                     new Serie { name = "P1", data = pointCollectionSocMaxPack1.ToArray() }, 
+                     new Serie { name = "P2", data = pointCollectionSocMaxPack2.ToArray() }, 
+                     new Serie { name = "P3", data = pointCollectionSocMaxPack3.ToArray() }, 
+                     new Serie { name = "P4", data = pointCollectionSocMaxPack4.ToArray() }, 
+                     new Serie { name = "P5", data = pointCollectionSocMaxPack5.ToArray() }, 
+                     new Serie { name = "P6", data = pointCollectionSocMaxPack6.ToArray() },                  
+                     new Serie { name = "P7", data = pointCollectionSocMaxPack7.ToArray() ,color="Grey" } 
                  };
 
                 hcVendas.DataSource = seriesMax;
@@ -513,7 +529,7 @@ namespace ChartGenerator
 
 
 
-            hcVendas.PlotOptions = new PlotOptionsLine { marker = new Marker { enabled = false }, dataLabels = new DataLabels { enabled = false } };
+            hcVendas.PlotOptions = new PlotOptionsLine { marker = new Marker { enabled = false }, dataLabels = new DataLabels { enabled = false }};
 
 
             //Bind the control         
@@ -538,7 +554,7 @@ namespace ChartGenerator
             hcVendas.Theme = "grid";
             hcVendas.Legend = new Legend { align = Align.right, layout = Layout.vertical, verticalAlign = VerticalAlign.top, x = -10, y = 70, borderWidth = 0 };
             hcVendas.Appearance = new Appearance { renderTo = "container", animation = false };
-            hcVendas.YAxis.Add(new YAxisItem { title = new Title("Tmax C ") });
+            hcVendas.YAxis.Add(new YAxisItem { title = new Title("Tmax C "), minorGridLineWidth = 0, gridLineWidth = 0 });
 
             hcVendas.XAxis.Add(new XAxisItem { type = AxisDataType.datetime, dateTimeLabelFormats = new DateTimeLabelFormats { hour = "%H" }, title = new Title("Time in Hours") });
 
@@ -586,14 +602,14 @@ namespace ChartGenerator
 
             var series = new Collection<Serie> { 
                    //  new Serie { name = "Tmax", data = pointCollectionTmax.ToArray() },
-                     new Serie { name = "TmaxPack0", data = pointCollectionTmaxPack0.ToArray() }, 
-                     new Serie { name = "TmaxPack1", data = pointCollectionTmaxPack1.ToArray() }, 
-                     new Serie { name = "TmaxPack2", data = pointCollectionTmaxPack2.ToArray() }, 
-                     new Serie { name = "TmaxPack3", data = pointCollectionTmaxPack3.ToArray() }, 
-                     new Serie { name = "TmaxPack4", data = pointCollectionTmaxPack4.ToArray() }, 
-                     new Serie { name = "TmaxPack5", data = pointCollectionTmaxPack5.ToArray() }, 
-                     new Serie { name = "TmaxPack6", data = pointCollectionTmaxPack6.ToArray() },                  
-                     new Serie { name = "TmaxPack7", data = pointCollectionTmaxPack7.ToArray() } 
+                     new Serie { name = "P0", data = pointCollectionTmaxPack0.ToArray() }, 
+                     new Serie { name = "P1", data = pointCollectionTmaxPack1.ToArray() }, 
+                     new Serie { name = "P2", data = pointCollectionTmaxPack2.ToArray() }, 
+                     new Serie { name = "P3", data = pointCollectionTmaxPack3.ToArray() }, 
+                     new Serie { name = "P4", data = pointCollectionTmaxPack4.ToArray() }, 
+                     new Serie { name = "P5", data = pointCollectionTmaxPack5.ToArray() }, 
+                     new Serie { name = "P6", data = pointCollectionTmaxPack6.ToArray() },                  
+                     new Serie { name = "P7", data = pointCollectionTmaxPack7.ToArray() ,color="Grey"} 
                  };
 
 
@@ -628,7 +644,7 @@ namespace ChartGenerator
             hcVendas.Theme = "grid";
             hcVendas.Legend = new Legend { align = Align.right, layout = Layout.vertical, verticalAlign = VerticalAlign.top, x = -10, y = 70, borderWidth = 0 };
             hcVendas.Appearance = new Appearance { renderTo = "container", animation = false };
-            hcVendas.YAxis.Add(new YAxisItem { title = new Title("Current C ") });
+            hcVendas.YAxis.Add(new YAxisItem { title = new Title("Current Amps "), minorGridLineWidth = 0, gridLineWidth = 0 });
 
             hcVendas.XAxis.Add(new XAxisItem { type = AxisDataType.datetime, dateTimeLabelFormats = new DateTimeLabelFormats { hour = "%H" }, title = new Title("Time in Hours") });
 
@@ -676,14 +692,14 @@ namespace ChartGenerator
 
             var series = new Collection<Serie> { 
                    //  new Serie { name = "Current", data = pointCollectionCurrent.ToArray() },
-                     new Serie { name = "IPack0", data = pointCollectionCurrentPack0.ToArray() }, 
-                     new Serie { name = "IPack1", data = pointCollectionCurrentPack1.ToArray() }, 
-                     new Serie { name = "IPack2", data = pointCollectionCurrentPack2.ToArray() }, 
-                     new Serie { name = "IPack3", data = pointCollectionCurrentPack3.ToArray() }, 
-                     new Serie { name = "IPack4", data = pointCollectionCurrentPack4.ToArray() }, 
-                     new Serie { name = "IPack5", data = pointCollectionCurrentPack5.ToArray() }, 
-                     new Serie { name = "IPack6", data = pointCollectionCurrentPack6.ToArray() },                  
-                     new Serie { name = "IPack7", data = pointCollectionCurrentPack7.ToArray() } 
+                     new Serie { name = "P0", data = pointCollectionCurrentPack0.ToArray() }, 
+                     new Serie { name = "P1", data = pointCollectionCurrentPack1.ToArray() }, 
+                     new Serie { name = "P2", data = pointCollectionCurrentPack2.ToArray() }, 
+                     new Serie { name = "P3", data = pointCollectionCurrentPack3.ToArray() }, 
+                     new Serie { name = "P4", data = pointCollectionCurrentPack4.ToArray() }, 
+                     new Serie { name = "P5", data = pointCollectionCurrentPack5.ToArray() }, 
+                     new Serie { name = "P6", data = pointCollectionCurrentPack6.ToArray() },                  
+                     new Serie { name = "P7", data = pointCollectionCurrentPack7.ToArray(),color="Grey" } 
                  };
 
 
